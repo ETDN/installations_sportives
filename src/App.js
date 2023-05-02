@@ -1,24 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Route, Routes, BrowserRouter } from "react-router-dom";
+import SportsFieldMap from "./components/image_mapper";
+import PoolReservation from "./components/pool_reservation";
+import CalendarTemplate from "./components/calendar";
 
 function App() {
+  const [availability, setAvailability] = useState([]);
+  const Calendar = CalendarTemplate({
+    availability,
+    setAvailability,
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<SportsFieldMap />} />
+        <Route path="/pool" element={<PoolReservation />} />
+        <Route path="/mapper" element={<SportsFieldMap />} />
+        <Route path="/calendar" element={<Calendar />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
