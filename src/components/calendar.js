@@ -617,7 +617,12 @@ const CalendarTemplate = ({
             </Grid>
           </Grid>
           <Grid item>
-            <Grid container direction="row" alignItems="center">
+            <Grid
+              container
+              direction="row"
+              alignItems="center"
+              justify="center"
+            >
               <Grid item>
                 <Button
                   color="primary"

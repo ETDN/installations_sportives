@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "../css/image_mapper.css";
 import ImageMapper from "react-image-mapper";
+import image from "../img/plan_terrain_ecossia.PNG";
 
 //ES6 way
 const SportsFieldMap = (props) => {
@@ -14,29 +15,38 @@ const SportsFieldMap = (props) => {
       {
         name: "1",
         shape: "poly",
-        coords: [25, 33, 27, 300, 128, 240, 128, 94],
-        preFillColor: "green",
+        coords: [366, 220, 367, 345, 450, 345, 450, 220],
+        preFillColor: "transparent",
         fillColor: "blue",
       },
       {
         name: "2",
         shape: "poly",
-        coords: [219, 118, 220, 210, 283, 210, 284, 119],
-        preFillColor: "pink",
+        coords: [285, 205, 285, 280, 345, 280, 345, 205],
+        preFillColor: "transparent",
+        fillColor: "pink",
       },
       {
         name: "3",
         shape: "poly",
-        coords: [381, 241, 383, 94, 462, 53, 457, 282],
+        coords: [55, 220, 55, 350, 142, 350, 142, 220],
+        preFillColor: "transparent",
         fillColor: "yellow",
       },
       {
         name: "4",
         shape: "poly",
-        coords: [245, 285, 290, 285, 274, 239, 249, 238],
-        preFillColor: "red",
+        coords: [72, 388, 95, 515, 180, 502, 156, 375],
+        preFillColor: "transparent",
+        fillColor: "red",
       },
-      { name: "5", shape: "circle", coords: [170, 100, 25] },
+      {
+        name: "5",
+        shape: "poly",
+        coords: [170, 213, 170, 340, 270, 340, 270, 213],
+        preFillColor: "transparent",
+        fillColor: "purple",
+      },
     ],
   };
 
@@ -89,8 +99,6 @@ const SportsFieldMap = (props) => {
       },
     ],
   };
-
-  var URL = "https://c1.staticflickr.com/5/4052/4503898393_303cfbc9fd_b.jpg";
 
   const load = () => {
     setMsg("Interact with image !");
@@ -157,7 +165,7 @@ const SportsFieldMap = (props) => {
       <div className="presenter">
         <div style={{ position: "relative" }}>
           <ImageMapper
-            src={URL}
+            src={image}
             map={MAP2}
             width={500}
             onLoad={() => load()}
