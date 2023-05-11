@@ -9,7 +9,7 @@ import {
   CircularProgress,
   Popover,
   ThemeProvider,
-  createMuiTheme,
+  createTheme,
 } from "@material-ui/core";
 import { ArrowLeft, ArrowRight } from "@material-ui/icons";
 
@@ -24,7 +24,7 @@ const CalendarTemplate = ({
   startTime = "8:00",
   endTime = "20:00",
 }) => {
-  const theme = createMuiTheme({
+  const theme = createTheme({
     typography: {
       fontFamily: `${fontFamily}`,
       fontSize: fontSize,

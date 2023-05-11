@@ -1,0 +1,20 @@
+{
+  "infrastructures": [
+    {
+      "id": 1,
+      "nom": "Piscine",
+      "saisons": [
+        {
+          "id": 1,
+          "nom": "Haute saison",
+          "regles": [
+            {
+              "type": "nombre_maitres_nageurs",
+              "valeur": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
