@@ -4,6 +4,7 @@ import SportsFieldMap from "./components/image_mapper";
 import PoolReservation from "./components/pool_reservation";
 import CalendarTemplate from "./components/calendar";
 import InfrastructuresComponent from "./components/InfrastructuresComponent";
+import PiscinesComponent from "./components/PiscinesComponent";
 
 function App() {
   const [availability, setAvailability] = useState([]);
@@ -20,6 +21,7 @@ function App() {
         <Route path="/mapper" element={<SportsFieldMap />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/infrastructure" element={<InfrastructuresComponent />} />
+        <Route path="/piscine" element={<PiscinesComponent />} />
       </Routes>
     </BrowserRouter>
   );

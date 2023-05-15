@@ -20,8 +20,9 @@ GET http://localhost:3001/bassins/1
 
 
 // ---------------- Sports center queries ----------------------
+###
 
-GET http://localhost:3001/centres_sportifs
+GET http://localhost:3001/centres
 
 ###
 

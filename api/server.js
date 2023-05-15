@@ -18,7 +18,7 @@ mongoose
 
 const Infrastructure = require("./models/InfrastructuresModel");
 const Piscine = require("./models/PiscinesModel");
-const Centre = require("./models/CentresSportifsModel");
+const CentreSportif = require("./models/CentresSportifsModel");
 const Patinoire = require("./models/PatinoiresModel");
 const Bassin = require("./models/BassinsModel");
 
@@ -72,8 +72,8 @@ app.get("/patinoires", async (req, res) => {
   res.json(patinoires);
 });
 
-app.get("/centres_sportifs", async (req, res) => {
-  const centres = await Centre.find();
+app.get("/centres", async (req, res) => {
+  const centres = await CentreSportif.find();
 
   res.json(centres);
 });

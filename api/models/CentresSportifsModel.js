@@ -8,10 +8,6 @@ const centreSportifsSchema = new mongoose.Schema({
   vestiaires: [Number],
 });
 
-const CentreSportif = mongoose.model(
-  "CentreSportif",
-  centreSportifsSchema,
-  "centres"
-);
+const Centre = mongoose.model("Centre", centreSportifsSchema);
 
-module.exports = CentreSportif;
+module.exports = Centre;
