@@ -3,6 +3,7 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import SportsFieldMap from "./components/image_mapper";
 import PoolReservation from "./components/pool_reservation";
 import CalendarTemplate from "./components/calendar";
+import InfrastructuresComponent from "./components/InfrastructuresComponent";
 
 function App() {
   const [availability, setAvailability] = useState([]);
@@ -18,6 +19,7 @@ function App() {
         <Route path="/pool" element={<PoolReservation />} />
         <Route path="/mapper" element={<SportsFieldMap />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/infrastructure" element={<InfrastructuresComponent />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,0 +1,18 @@
+GET http://localhost:3001/infrastructures
+
+###
+
+PUT http://localhost:3001/infrastructures/:id
+
+###
+
+
+// ---------------- Pools queries ----------------------
+
+GET http://localhost:3001/piscines
+
+###
+
+// ---------------- Sports center queries ----------------------
+
+GET http://localhost:3001/centres_sportifs
