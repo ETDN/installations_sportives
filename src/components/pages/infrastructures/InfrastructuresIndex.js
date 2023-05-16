@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const InfrastructuresComponent = () => {
+import {
+  InfrastructureCard,
+  InfrastructureContainer,
+  InfrastructureH1,
+  InfrastructureH2,
+  InfrastructureIcon,
+  InfrastructureWrapper,
+} from "./InfrastructureElement";
+
+const InfrastructuresIndex = () => {
   const [piscines, setPiscines] = useState([]);
   const [centres, setCentres] = useState([]);
   const [patinoires, setPatinoires] = useState([]);
@@ -64,36 +73,41 @@ const InfrastructuresComponent = () => {
   };
 
   return (
-    <div>
-      {centres.map((centre) => (
-        <div key={centre._id}>
-          <h3>{centre.id_centre}</h3>
-          <p>Nom: {centre.nom_centre}</p>
-        </div>
-      ))}
+    <>
+      <InfrastructureContainer id="projects">
+        <InfrastructureH1>Infrastructures sportives</InfrastructureH1>
+        <InfrastructureWrapper>
+          {centres.map((centre) => (
+            <InfrastructureCard key={centre._id}>
+              {/* <img src={piscine} alt={centre.nom_piscine} /> */}
+              <InfrastructureIcon
+                src={centre.image}
+                alt={centre.nom_centre}
+              ></InfrastructureIcon>
+              <InfrastructureH2>{centre.nom_centre}</InfrastructureH2>
+            </InfrastructureCard>
+          ))}
 
-      {piscines.map((piscine) => (
-        <div key={piscine._id}>
-          <h3>Nom: {piscine.nom_piscine}</h3>
-          {/* <p>
-            Bassins:{" "}
-            {piscine.bassins
-              .map((bassinId) => {
-                const bassin = bassins.find((b) => b.id_bassin === bassinId);
-                return bassin ? bassin.nom_bassin : "Unknown";
-              })
-              .join(", ")}
-          </p> */}
-        </div>
-      ))}
+          {piscines.map((piscine) => (
+            <InfrastructureCard key={piscine._id}>
+              <InfrastructureIcon
+                src={piscine.image}
+                alt={piscine.nom_piscine}
+              ></InfrastructureIcon>
+              <InfrastructureH2>{piscine.nom_piscine}</InfrastructureH2>
+            </InfrastructureCard>
+          ))}
 
-      {patinoires.map((patinoire) => (
-        <div key={patinoire._id}>
-          <h3>Nom: {patinoire.nom_patinoire}</h3>
-        </div>
-      ))}
-    </div>
+          {patinoires.map((patinoire) => (
+            <InfrastructureCard key={patinoire._id}>
+              <InfrastructureIcon />
+              <InfrastructureH2>{patinoire.nom_patinoire}</InfrastructureH2>
+            </InfrastructureCard>
+          ))}
+        </InfrastructureWrapper>
+      </InfrastructureContainer>
+    </>
   );
 };
 
-export default InfrastructuresComponent;
+export default InfrastructuresIndex;

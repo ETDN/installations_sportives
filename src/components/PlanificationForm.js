@@ -1,5 +1,8 @@
+import React, { useState } from "react";
+
 function PlanificationForm({ infrastructures }) {
   const [saison, setSaison] = useState("");
+  const [planification, setResultatPlanification] = useState("");
   const [horaireOuverture, setHoraireOuverture] = useState("");
 
   const handleFormSubmit = (event) => {
@@ -36,30 +39,30 @@ function PlanificationForm({ infrastructures }) {
       isValid ? "Planification valide" : "Planification invalide"
     );
   };
+
+  return (
+    <form onSubmit={handleFormSubmit}>
+      <label>
+        Saison:
+        <input
+          type="text"
+          value={saison}
+          onChange={(e) => setSaison(e.target.value)}
+        />
+      </label>
+
+      <label>
+        Horaire d'ouverture:
+        <input
+          type="text"
+          value={horaireOuverture}
+          onChange={(e) => setHoraireOuverture(e.target.value)}
+        />
+      </label>
+
+      <button type="submit">Planifier</button>
+    </form>
+  );
 }
-
-return (
-  <form onSubmit={handleFormSubmit}>
-    <label>
-      Saison:
-      <input
-        type="text"
-        value={saison}
-        onChange={(e) => setSaison(e.target.value)}
-      />
-    </label>
-
-    <label>
-      Horaire d'ouverture:
-      <input
-        type="text"
-        value={horaireOuverture}
-        onChange={(e) => setHoraireOuverture(e.target.value)}
-      />
-    </label>
-
-    <button type="submit">Planifier</button>
-  </form>
-);
 
 export default PlanificationForm;
