@@ -40,7 +40,15 @@ GET http://localhost:3001/centres
 
 ###
 
+GET http://localhost:3001/centres/1
+
+###
+
 GET http://localhost:3001/terrains
+
+###
+
+GET http://localhost:3001/terrains/2
 
 ###
 

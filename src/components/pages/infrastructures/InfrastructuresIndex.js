@@ -15,8 +15,6 @@ const InfrastructuresIndex = () => {
   const [piscines, setPiscines] = useState([]);
   const [selectedPiscine, setSelectedPiscine] = useState(null);
 
-  const [bassins, setBassins] = useState([]);
-
   const [centres, setCentres] = useState([]);
   const [selectedCentre, setSelectedCentre] = useState(null);
 
@@ -25,7 +23,6 @@ const InfrastructuresIndex = () => {
   const [patinoires, setPatinoires] = useState([]);
 
   const [gyms, setGyms] = useState([]);
-  const [salles, setSalles] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,9 +50,7 @@ const InfrastructuresIndex = () => {
         setPiscines(piscinesResponse.data);
         setCentres(centresResponse.data);
         setPatinoires(patinoireResponse.data);
-        setBassins(bassinResponse.data);
         setGyms(gymResponse.data);
-        setSalles(salleResponse.data);
         setTerrains(terrainsResponse.data);
 
         console.log("centresResponse ", centresResponse.data);
@@ -67,40 +62,14 @@ const InfrastructuresIndex = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchBassins = async () => {
-      try {
-        const bassinsResponse = await axios.get(
-          "http://localhost:3001/bassins"
-        );
-        const fetchedBassins = bassinsResponse.data;
-        setBassins(fetchedBassins);
-        console.log(fetchBassins);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchBassins();
-  }, []);
-
   const handleClickPiscine = (id) => {
     console.log("Clicked piscine ID:", id);
     setSelectedPiscine(id === selectedPiscine ? null : id);
   };
 
-  useEffect(() => {
-    console.log("Selected piscine ntmmmmmmm:", selectedPiscine);
-  }, [selectedPiscine]);
-
-  const InfrastructureCard = ({ onClick, selected, children }) => {
-    console.log("Selected:", selected);
-
-    return (
-      <div onClick={onClick} className={`... ${selected ? "selected" : ""}`}>
-        {children}
-      </div>
-    );
+  const handleClickCentre = (id) => {
+    console.log("Clicked centre ID:", id);
+    setSelectedCentre(id === selectedCentre ? null : id);
   };
 
   return (
@@ -110,41 +79,19 @@ const InfrastructuresIndex = () => {
         <InfrastructureWrapper>
           {centres.map((centre) => (
             <InfrastructureCard
-              key={centre._id}
-              onClick={() => {
-                if (selectedCentre === centre._id) {
-                  setSelectedCentre(null);
-                } else {
-                  setSelectedCentre(centre._id);
-                }
-              }}
+              key={centre.id_centre}
+              onClick={() => handleClickCentre(centre.id_centre)}
+              selected={selectedCentre === centre.id_centre}
             >
-              <InfrastructureIcon
-                src={centre.image}
-                alt={centre.nom_centre}
-              ></InfrastructureIcon>
+              <Link to={`/centre/${centre.id_centre}/terrains`}>
+                <InfrastructureIcon
+                  src={centre.image}
+                  alt={centre.nom_centre}
+                />
+              </Link>
               <InfrastructureH2>{centre.nom_centre}</InfrastructureH2>
             </InfrastructureCard>
           ))}
-
-          {selectedCentre && (
-            <div>
-              <h3>
-                Terrains de{" "}
-                {centres.find((p) => p._id === selectedCentre).nom_centre}
-              </h3>
-              <ul>
-                {centres
-                  .find((p) => p._id === selectedCentre)
-                  .terrains.map((terrainId) => {
-                    const terrain = terrains.find(
-                      (b) => b.id_terrain === terrainId
-                    );
-                    return <li key={terrain._id}>{terrain.nom_terrain}</li>;
-                  })}
-              </ul>
-            </div>
-          )}
 
           {piscines.map((piscine) => (
             <InfrastructureCard

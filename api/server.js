@@ -32,6 +32,8 @@ app.get("/infrastructures", async (req, res) => {
   res.json(infrastructures);
 });
 
+/* --------------- Piscine -------------------- */
+
 app.get("/piscines", async (req, res) => {
   const piscines = await Piscine.find();
 
@@ -83,11 +85,7 @@ app.get("/bassins", async (req, res) => {
   res.json(bassins);
 });
 
-app.get("/patinoires", async (req, res) => {
-  const patinoires = await Patinoire.find();
-
-  res.json(patinoires);
-});
+/* --------------- Centres sportifs  -------------------- */
 
 app.get("/centres", async (req, res) => {
   const centres = await CentreSportif.find();
@@ -95,11 +93,60 @@ app.get("/centres", async (req, res) => {
   res.json(centres);
 });
 
+app.get("/centres/:id", async (req, res) => {
+  const centreId = Number(req.params.id); // Convertir l'ID en un nombre
+  try {
+    const centre = await CentreSportif.aggregate([
+      { $match: { id_centre: centreId } },
+      {
+        $lookup: {
+          from: "terrains", // Utiliser la collection "bassins" pour la jointure
+          localField: "id_centre",
+          foreignField: "id_centre",
+          as: "terrainsInfo",
+        },
+      },
+      { $project: { _id: 0, nom_centre: 1, terrainsInfo: 1 } }, // Inclure les informations des bassins dans le résultat
+    ]);
+    if (centre.length === 0) {
+      return res.status(404).json({ error: "Centre not found" });
+    }
+    res.json(centre[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/terrains", async (req, res) => {
   const terrains = await Terrain.find();
 
   res.json(terrains);
 });
+
+app.get("/terrains/:id", async (req, res) => {
+  const centreId = Number(req.params.id); // Convertir l'ID en un nombre
+  try {
+    const terrains = await Terrain.find({ id_centre: centreId });
+    if (terrains.length === 0) {
+      return res.status(404).json({ error: "Centre not found" });
+    }
+    res.json(terrains);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+/* --------------- Patinoire -------------------- */
+
+app.get("/patinoires", async (req, res) => {
+  const patinoires = await Patinoire.find();
+
+  res.json(patinoires);
+});
+
+/* --------------- Salles de gyms -------------------- */
 
 app.get("/gyms", async (req, res) => {
   const gyms = await Gym.find();
