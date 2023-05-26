@@ -21,6 +21,9 @@ const Piscine = require("./models/PiscinesModel");
 const CentreSportif = require("./models/CentresSportifsModel");
 const Patinoire = require("./models/PatinoiresModel");
 const Bassin = require("./models/BassinsModel");
+const Gym = require("./models/GymsModel");
+const Salle = require("./models/SallesModel");
+const Terrain = require("./models/TerrainsModel");
 
 //if we make a request to localhost 3001/todos it's gonna to find our todos and find our model
 app.get("/infrastructures", async (req, res) => {
@@ -35,25 +38,39 @@ app.get("/piscines", async (req, res) => {
   res.json(piscines);
 });
 
-app.get("/bassins/:id", async (req, res) => {
-  const piscineId = Number(req.params.id); // Convert id to a number
+app.get("/piscines/:id", async (req, res) => {
+  const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
   try {
-    const bassins = await Piscine.aggregate([
+    const piscine = await Piscine.aggregate([
       { $match: { id_piscine: piscineId } },
       {
         $lookup: {
-          from: "bassins",
-          localField: "bassins",
-          foreignField: "id_bassin",
+          from: "bassins", // Utiliser la collection "bassins" pour la jointure
+          localField: "id_piscine",
+          foreignField: "id_piscine",
           as: "bassinsInfo",
         },
       },
-      { $project: { _id: 0, "bassinsInfo.nom_bassin": 1 } },
+      { $project: { _id: 0, nom_piscine: 1, bassinsInfo: 1 } }, // Inclure les informations des bassins dans le résultat
     ]);
+    if (piscine.length === 0) {
+      return res.status(404).json({ error: "Piscine not found" });
+    }
+    res.json(piscine[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/bassins/:id", async (req, res) => {
+  const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
+  try {
+    const bassins = await Bassin.find({ id_piscine: piscineId });
     if (bassins.length === 0) {
       return res.status(404).json({ error: "Piscine not found" });
     }
-    res.json(bassins[0].bassinsInfo.map((bassin) => bassin.nom_bassin));
+    res.json(bassins);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
@@ -76,6 +93,24 @@ app.get("/centres", async (req, res) => {
   const centres = await CentreSportif.find();
 
   res.json(centres);
+});
+
+app.get("/terrains", async (req, res) => {
+  const terrains = await Terrain.find();
+
+  res.json(terrains);
+});
+
+app.get("/gyms", async (req, res) => {
+  const gyms = await Gym.find();
+
+  res.json(gyms);
+});
+
+app.get("/salles", async (req, res) => {
+  const salles = await Salle.find();
+
+  res.json(salles);
 });
 
 app.listen(3001, () => console.log("Server starter on port 3001"));

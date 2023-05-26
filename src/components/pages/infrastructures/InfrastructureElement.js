@@ -12,21 +12,6 @@ export const InfrastructureContainer = styled.div`
   position: relative;
   z-index: 1;
 
-  :before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.2) 0% rgba(0, 0, 0, 0.6) 100%
-      ),
-      linear-gradient(180deg, rgba(0, 0, 0, 0.2) 0%, transparent 100%);
-    z-index: 2;
-  }
-
   @media screen and (max-width: 768px) {
     height: 1100px;
   }
@@ -60,7 +45,7 @@ export const InfrastructureWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  grid-gap: 16px;
+  grid-gap: 65px;
   padding: 0 50px;
   z-index: 3;
 
@@ -80,18 +65,15 @@ export const InfrastructureCard = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  /* border-radius: 10px; */
   width: 300px;
   height: 300px;
-  padding: 20px;
-  /* box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); */
   transition: all 0.2s ease-in-out;
 
-  /* &:hover {
+  &:hover {
     transform: scale(1.02);
     transition: all 0.2s ease-in-out;
     cursor: pointer;
-  } */
+  }
 `;
 
 export const InfrastructureIcon = styled.img`
@@ -108,7 +90,7 @@ export const InfrastructureH1 = styled.h1`
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 400;
   font-size: 2rem;
-  margin-top: 100px;
+  margin-top: 250px;
   margin-bottom: 40px;
   z-index: 3;
 
@@ -118,11 +100,14 @@ export const InfrastructureH1 = styled.h1`
 `;
 
 export const InfrastructureH2 = styled.h2`
+  display: flex;
   color: black;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 500;
   font-size: 1.4rem;
   margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const InfrastructureP = styled.p`

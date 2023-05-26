@@ -6,9 +6,23 @@ PUT http://localhost:3001/infrastructures/:id
 
 ###
 
+// --------------- Gyms queries ------------------------
+
+GET http://localhost:3001/gyms
+
+###
+
+GET http://localhost:3001/salles
+
+###
+
 // ---------------- Pools queries ----------------------
 
 GET http://localhost:3001/piscines
+
+###
+
+GET http://localhost:3001/piscines/1
 
 ###
 
@@ -16,13 +30,17 @@ GET http://localhost:3001/bassins
 
 ###
 
-GET http://localhost:3001/bassins/1
+GET http://localhost:3001/bassins/2
 
 
 // ---------------- Sports center queries ----------------------
 ###
 
 GET http://localhost:3001/centres
+
+###
+
+GET http://localhost:3001/terrains
 
 ###
 
