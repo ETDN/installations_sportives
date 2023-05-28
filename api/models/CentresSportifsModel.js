@@ -6,12 +6,8 @@ const centreSportifsSchema = new mongoose.Schema({
   id_infrastructure: Number,
   terrains: [Number],
   vestiaires: [Number],
-  image: {
-    $binary: {
-      base64: String,
-      subType: String,
-    },
-  },
+  image: String,
+  plan_image: String,
 });
 
 const Centre = mongoose.model("Centre", centreSportifsSchema);

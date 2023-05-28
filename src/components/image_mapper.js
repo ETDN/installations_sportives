@@ -3,101 +3,24 @@ import "../css/image_mapper.css";
 import ImageMapper from "react-image-mapper";
 import image from "../img/plan_terrain_ecossia.PNG";
 
-//ES6 way
 const SportsFieldMap = (props) => {
   const [msg, setMsg] = useState(null);
   const [hoveredArea, setHoveredArea] = useState(null);
   const [moveMsg, setMoveMsg] = useState(null);
 
-  let MAP2 = {
-    name: "my-map",
-    areas: [
-      {
-        name: "1",
-        shape: "poly",
-        coords: [366, 220, 367, 345, 450, 345, 450, 220],
-        preFillColor: "transparent",
-        fillColor: "blue",
-      },
-      {
-        name: "2",
-        shape: "poly",
-        coords: [285, 205, 285, 280, 345, 280, 345, 205],
-        preFillColor: "transparent",
-        fillColor: "pink",
-      },
-      {
-        name: "3",
-        shape: "poly",
-        coords: [55, 220, 55, 350, 142, 350, 142, 220],
-        preFillColor: "transparent",
-        fillColor: "yellow",
-      },
-      {
-        name: "4",
-        shape: "poly",
-        coords: [72, 388, 95, 515, 180, 502, 156, 375],
-        preFillColor: "transparent",
-        fillColor: "red",
-      },
-      {
-        name: "5",
-        shape: "poly",
-        coords: [170, 213, 170, 340, 270, 340, 270, 213],
-        preFillColor: "transparent",
-        fillColor: "purple",
-      },
-    ],
+  const generateAreas = () => {
+    return props.terrains.map((terrain) => ({
+      name: terrain.id_terrain.toString(),
+      shape: "poly",
+      coords: terrain.coords,
+      preFillColor: "transparent",
+      fillColor: terrain.fillColor,
+    }));
   };
 
-  let MAP = {
+  const MAP = {
     name: "my-map",
-    areas: [
-      {
-        name: "1",
-        shape: "poly",
-        coords: [25, 33, 27, 300, 128, 240, 128, 94],
-        preFillColor: "green",
-        fillColor: "#0000ff",
-      },
-      {
-        name: "2",
-        shape: "poly",
-        coords: [219, 118, 220, 210, 283, 210, 284, 119],
-        preFillColor: "pink",
-        lineWidth: 10,
-        strokeColor: "#0000ff",
-      },
-      {
-        name: "3",
-        shape: "poly",
-        coords: [381, 241, 383, 94, 462, 53, 457, 282],
-        preFillColor: "yellow", // this is mandatory for stroke color to work
-        lineWidth: 10,
-        strokeColor: "#6afd09",
-      },
-      {
-        name: "4",
-        shape: "poly",
-        coords: [245, 285, 290, 285, 274, 239, 249, 238],
-        preFillColor: "red",
-      },
-      {
-        name: "5",
-        shape: "circle",
-        coords: [170, 100, 25],
-        preFillColor: "rgb(255,255,255,0.3)",
-        lineWidth: 2,
-      },
-      {
-        name: "6",
-        shape: "rect",
-        coords: [270, 100, 200, 50],
-        lineWidth: 2,
-        preFillColor: "rgba(255, 255, 255, 0.3)",
-        strokeColor: "#6afd09",
-      },
-    ],
+    areas: generateAreas(),
   };
 
   const load = () => {
@@ -105,11 +28,7 @@ const SportsFieldMap = (props) => {
   };
 
   const clicked = (area) => {
-    setMsg(
-      `You clicked on ${area.shape} ${area.name} at coords ${JSON.stringify(
-        area.coords
-      )} !`
-    );
+    setMsg(`You clicked on ${area.name} (${area.coords.join(", ")})!`);
   };
 
   const clickedOutside = (evt) => {
@@ -123,36 +42,21 @@ const SportsFieldMap = (props) => {
   };
 
   const enterArea = (area) => {
-    //hoveredArea: area, ???
     setHoveredArea(area);
-    setMsg(
-      `You entered ${area.shape} ${area.name} at coords ${JSON.stringify(
-        area.coords
-      )} !`
-    );
+    setMsg(`You entered ${area.name} (${area.coords.join(", ")})!`);
   };
 
   const leaveArea = (area) => {
     setHoveredArea(null);
-    setMsg(
-      `You leaved ${area.shape} ${area.name} at coords ${JSON.stringify(
-        area.coords
-      )} !`
-    );
+    setMsg(`You left ${area.name} (${area.coords.join(", ")})!`);
   };
 
   const moveOnArea = (area, evt) => {
     const coords = { x: evt.nativeEvent.layerX, y: evt.nativeEvent.layerY };
     setMoveMsg(
-      "You moved on " +
-        area.shape +
-        " " +
-        area.name +
-        ' at coords {"x":' +
-        coords.x +
-        ',"y":' +
-        coords.y +
-        "} !"
+      `You moved on ${area.name} (${area.coords.join(", ")}) at coords (${
+        coords.x
+      }, ${coords.y})!`
     );
   };
 
@@ -166,7 +70,7 @@ const SportsFieldMap = (props) => {
         <div style={{ position: "relative" }}>
           <ImageMapper
             src={image}
-            map={MAP2}
+            map={MAP}
             width={500}
             onLoad={() => load()}
             onMouseMove={(area, _, evt) => moveOnArea(area, evt)}
@@ -184,7 +88,7 @@ const SportsFieldMap = (props) => {
               className="tooltip"
               style={{ ...getTipPosition(hoveredArea) }}
             >
-              {hoveredArea && hoveredArea.name}
+              {hoveredArea.name}
             </span>
           )}
         </div>
@@ -194,7 +98,6 @@ const SportsFieldMap = (props) => {
       </div>
     </div>
   );
-  //return React.createElement('div', {className:"App"}, React.createElement('h1',null,'Hi 2 !!!'))
 };
 
 export default SportsFieldMap;

@@ -22,7 +22,7 @@ const CalendarTemplate = ({
   fontSize = 12,
   primaryFontColor = "#222222",
   startTime = "8:00",
-  endTime = "20:00",
+  endTime = "22:00",
 }) => {
   const theme = createTheme({
     typography: {
@@ -225,14 +225,6 @@ const CalendarTemplate = ({
       },
       {
         time: "22:00",
-        available: false,
-      },
-      {
-        time: "23:00",
-        available: false,
-      },
-      {
-        time: "0:00",
         available: false,
       },
     ];
@@ -576,7 +568,7 @@ const CalendarTemplate = ({
                     >
                       {times.map(
                         (time, i) =>
-                          i < times.length - 7 && (
+                          i < times.length - 9 && (
                             <TimeButton
                               key={time.time}
                               className={classes.button}

@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import "typeface-roboto";
 
 export const InfrastructureContainer = styled.div`
   background: white;
@@ -87,7 +86,6 @@ export const InfrastructureIcon = styled.img`
 
 export const InfrastructureH1 = styled.h1`
   color: black;
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 400;
   font-size: 2rem;
   margin-top: 250px;

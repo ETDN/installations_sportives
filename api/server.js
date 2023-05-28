@@ -100,13 +100,37 @@ app.get("/centres/:id", async (req, res) => {
       { $match: { id_centre: centreId } },
       {
         $lookup: {
-          from: "terrains", // Utiliser la collection "bassins" pour la jointure
+          from: "terrains", // Utiliser la collection "terrains" pour la jointure
           localField: "id_centre",
           foreignField: "id_centre",
           as: "terrainsInfo",
         },
       },
-      { $project: { _id: 0, nom_centre: 1, terrainsInfo: 1 } }, // Inclure les informations des bassins dans le résultat
+      {
+        $lookup: {
+          from: "vestiaires", // Utiliser la collection "vestiaires" pour la jointure
+          localField: "id_centre",
+          foreignField: "id_centre",
+          as: "vestiairesInfo",
+        },
+      },
+      {
+        $lookup: {
+          from: "centres", // Utiliser la collection "vestiaires" pour la jointure
+          localField: "id_centre",
+          foreignField: "id_centre",
+          as: "centresInfo",
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          nom_centre: 1,
+          terrainsInfo: 1,
+          vestiairesInfo: 1,
+          centresInfo: 1,
+        },
+      }, // Inclure les informations des terrains et vestiaires dans le résultat
     ]);
     if (centre.length === 0) {
       return res.status(404).json({ error: "Centre not found" });
