@@ -23,6 +23,7 @@ const InfrastructuresIndex = () => {
   const [patinoires, setPatinoires] = useState([]);
 
   const [gyms, setGyms] = useState([]);
+  const [selectedGym, setSelectedGym] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,13 +64,15 @@ const InfrastructuresIndex = () => {
   }, []);
 
   const handleClickPiscine = (id) => {
-    console.log("Clicked piscine ID:", id);
     setSelectedPiscine(id === selectedPiscine ? null : id);
   };
 
   const handleClickCentre = (id) => {
-    console.log("Clicked centre ID:", id);
     setSelectedCentre(id === selectedCentre ? null : id);
+  };
+
+  const handleClickGym = (id) => {
+    setSelectedPiscine(id === selectedPiscine ? null : id);
   };
 
   return (
@@ -120,11 +123,15 @@ const InfrastructuresIndex = () => {
           ))}
 
           {gyms.map((gym) => (
-            <InfrastructureCard key={gym._id}>
-              <InfrastructureIcon
-                src={gym.image}
-                alt={gym.nom_gym}
-              ></InfrastructureIcon>
+            <InfrastructureCard
+              key={gym.id_gym}
+              onClick={() => handleClickGym(gym.id_gym)}
+              selected={selectedGym === gym.id_gym}
+            >
+              <Link to={`/gym/${gym.id_gym}/salles`}>
+                <InfrastructureIcon src={gym.image} alt={gym.nom_gym} />
+              </Link>
+
               <InfrastructureH2>Salles de gyms</InfrastructureH2>
             </InfrastructureCard>
           ))}

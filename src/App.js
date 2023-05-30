@@ -6,6 +6,7 @@ import CalendarTemplate from "./components/calendar";
 import InfrastructuresIndex from "./components/pages/infrastructures/InfrastructuresIndex";
 import BassinsIndex from "./components/pages/pools/bassins/BassinsIndex";
 import TerrainsIndex from "./components/pages/centres/terrains/TerrainsIndex";
+import SallesIndex from "./components/pages/gyms/salles/SallesIndex";
 
 function App() {
   const [availability, setAvailability] = useState([]);
@@ -23,6 +24,7 @@ function App() {
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/infrastructure" element={<InfrastructuresIndex />} />
         <Route path="/piscine/:id_piscine/bassins" element={<BassinsIndex />} />
+        <Route path="/gym/:id_gym/salles" element={<SallesIndex />} />
         <Route path="/centre/:id_centre/terrains" element={<TerrainsIndex />} />
       </Routes>
     </BrowserRouter>

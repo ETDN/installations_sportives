@@ -52,4 +52,21 @@ export const TerrainPlan = styled.img`
   }
 `;
 
+export const ImageMapper = styled.img`
+  background-color: orange;
+  width: 250px;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 3;
+  cursor: pointer;
+
+  &.active {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    z-index: 4;
+    width: 300px;
+  }
+`;
+
 export const TerrainInfo = styled.div``;

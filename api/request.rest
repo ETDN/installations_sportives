@@ -11,8 +11,11 @@ PUT http://localhost:3001/infrastructures/:id
 GET http://localhost:3001/gyms
 
 ###
+GET http://localhost:3001/gyms/1
 
-GET http://localhost:3001/salles
+###
+
+GET http://localhost:3001/salles/
 
 ###
 

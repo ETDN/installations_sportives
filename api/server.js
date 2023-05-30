@@ -178,10 +178,50 @@ app.get("/gyms", async (req, res) => {
   res.json(gyms);
 });
 
+app.get("/gyms/:id", async (req, res) => {
+  const gymId = Number(req.params.id);
+  try {
+    const gym = await Gym.aggregate([
+      { $match: { id_gym: gymId } },
+      {
+        $lookup: {
+          from: "salles",
+          localField: "id_gym",
+          foreignField: "id_gym",
+          as: "sallesInfo",
+        },
+      },
+      { $project: { _id: 0, nom_gym: 1, sallesInfo: 1 } },
+    ]);
+    console.log("Gym:", gym);
+    if (gym.length === 0) {
+      return res.status(404).json({ error: "Gym not found" });
+    }
+    res.json(gym[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/salles", async (req, res) => {
   const salles = await Salle.find();
 
   res.json(salles);
+});
+
+app.get("/salles/:id", async (req, res) => {
+  const gymId = Number(req.params.id); // Convertir l'ID en un nombre
+  try {
+    const salles = await Salle.find({ id_gym: gymId });
+    if (salles.length === 0) {
+      return res.status(404).json({ error: "Centre not found" });
+    }
+    res.json(salles);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
 });
 
 app.listen(3001, () => console.log("Server starter on port 3001"));
