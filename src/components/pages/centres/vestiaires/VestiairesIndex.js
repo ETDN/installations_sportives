@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { TerrainH2 } from "../terrains/TerrainElement";
+import { ListElement } from "../../infrastructures/InfrastructureElement";
 
 const VestiaireIndex = ({ centreId }) => {
   const [vestiaires, setVestiaires] = useState([]);
@@ -27,7 +28,9 @@ const VestiaireIndex = ({ centreId }) => {
       <TerrainH2>Vestiaires</TerrainH2>
       {vestiaires && vestiaires.length > 0 ? (
         vestiaires.map((vestiaire) => (
-          <li key={vestiaire._id}>{vestiaire.nom_vestiaire}</li>
+          <ListElement key={vestiaire._id}>
+            {vestiaire.nom_vestiaire}
+          </ListElement>
         ))
       ) : (
         <li>Aucun vestiaire disponible</li>

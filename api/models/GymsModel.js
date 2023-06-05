@@ -5,6 +5,7 @@ const gymSchema = new mongoose.Schema({
   nom_gym: String,
   id_infrastructure: Number,
   salles: [Number],
+  image: String,
 });
 
 const Gym = mongoose.model("Gyms", gymSchema, "gyms");

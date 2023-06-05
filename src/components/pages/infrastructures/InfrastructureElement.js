@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const InfrastructureContainer = styled.div`
+export const Container = styled.div`
   background: white;
   display: flex;
   flex-direction: column;
@@ -20,7 +20,7 @@ export const InfrastructureContainer = styled.div`
   }
 `;
 
-export const InfrastructureBg = styled.div`
+export const Background = styled.div`
   position: absolute;
   top: 0;
   right: 0;
@@ -30,15 +30,8 @@ export const InfrastructureBg = styled.div`
   height: 100%;
   overflow: hidden;
 `;
-export const VideoBg = styled.img`
-  width: 100%;
-  height: 100%;
-  -o-object-fit: cover;
-  object-fit: cover;
-  background: #232a40;
-`;
 
-export const InfrastructureWrapper = styled.div`
+export const Wrapper = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   display: grid;
@@ -58,7 +51,7 @@ export const InfrastructureWrapper = styled.div`
   }
 `;
 
-export const InfrastructureCard = styled.div`
+export const Card = styled.div`
   background: transparent;
   display: flex;
   flex-direction: column;
@@ -75,16 +68,22 @@ export const InfrastructureCard = styled.div`
   }
 `;
 
-export const InfrastructureIcon = styled.img`
-  height: 220px;
-  width: 280px;
+export const Icon = styled.img`
+  height: 160px;
+  width: 220px;
   margin-bottom: 20px;
   transition: transform 0.5s ease;
   box-shadow: rgb(237, 14, 46)-10px 10px;
   z-index: 3;
 `;
 
-export const InfrastructureH1 = styled.h1`
+export const Titre = styled.h1`
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  font-weight: 500;
+`;
+
+export const H1 = styled.h1`
   color: black;
   font-weight: 400;
   font-size: 2rem;
@@ -97,7 +96,7 @@ export const InfrastructureH1 = styled.h1`
   }
 `;
 
-export const InfrastructureH2 = styled.h2`
+export const H2 = styled.h2`
   display: flex;
   color: black;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -108,8 +107,28 @@ export const InfrastructureH2 = styled.h2`
   align-items: center;
 `;
 
-export const InfrastructureP = styled.p`
+export const Paragraph = styled.p`
   color: black;
+  font-size: 1.2rem;
+  margin-bottom: 25px;
+`;
+
+export const List = styled.ul`
   font-size: 1rem;
-  text-align: center;
+  font-weight: 500;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+`;
+
+export const ListElement = styled.li`
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  cursor: pointer;
+  max-width: 200px; /* Set the desired maximum width */
+
+  &:hover {
+    color: red;
+  }
 `;

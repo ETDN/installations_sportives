@@ -12,6 +12,8 @@ import {
   createTheme,
 } from "@material-ui/core";
 import { ArrowLeft, ArrowRight } from "@material-ui/icons";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const CalendarTemplate = ({
   availability,
@@ -241,6 +243,9 @@ const CalendarTemplate = ({
     });
   };
 
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [showPopup, setShowPopup] = useState(false);
+
   function TimeButton({ className, start, end, available, handleClick }) {
     return (
       <Button
@@ -419,8 +424,11 @@ const CalendarTemplate = ({
         addTimesToDay(day);
       } else {
         examineAvailabilityForDay(day);
+        setSelectedDate(day);
+        setShowPopup(true);
       }
     };
+
     const handleSetMultiple = () => {
       setActiveDay(null);
       setSettingMultiple(!settingMultiple);
@@ -492,16 +500,7 @@ const CalendarTemplate = ({
                               <IconButton
                                 onClick={createDayHandler(day)}
                                 color={
-                                  activeDay === day
-                                    ? "primary"
-                                    : availabilityState[year] &&
-                                      availabilityState[year][month] &&
-                                      availabilityState[year][month][day] &&
-                                      availabilityState[year][month][
-                                        day
-                                      ].filter((x) => x.available).length > 0
-                                    ? "secondary"
-                                    : "default"
+                                  activeDay === day ? "primary" : "default"
                                 }
                                 disabled={
                                   !day ||
@@ -552,97 +551,36 @@ const CalendarTemplate = ({
                   <ArrowRight />
                 </IconButton>
               </Grid>
-              <Grid item>
-                <Grid
-                  container
-                  justify="center"
-                  alignItems="center"
-                  wrap="wrap"
-                >
-                  <Grid item>
-                    <Grid
-                      container
-                      direction="column"
-                      alignItems="center"
-                      wrap="wrap"
-                    >
-                      {times.map(
-                        (time, i) =>
-                          i < times.length - 9 && (
-                            <TimeButton
-                              key={time.time}
-                              className={classes.button}
-                              start={time.time}
-                              end={times[i + 1].time}
-                              handleClick={createTimeHandler(i)}
-                              available={time.available}
-                            />
-                          )
-                      )}
-                    </Grid>
-                  </Grid>
-                  <Grid item>
-                    <Grid
-                      container
-                      direction="column"
-                      alignItems="center"
-                      wrap="wrap"
-                    >
-                      {times.map(
-                        (time, i) =>
-                          i < times.length - 1 &&
-                          i > 5 && (
-                            <TimeButton
-                              key={time.time}
-                              className={classes.button}
-                              start={time.time}
-                              end={times[i + 1].time}
-                              handleClick={createTimeHandler(i)}
-                              available={time.available}
-                            />
-                          )
-                      )}
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
             </Grid>
           </Grid>
-          <Grid item>
-            <Grid
-              container
-              direction="row"
-              alignItems="center"
-              justify="center"
-            >
-              <Grid item>
-                <Button
-                  color="primary"
-                  variant="contained"
-                  onClick={handleSetMultiple}
-                  className={classes.button}
-                >
-                  {settingMultiple
-                    ? "Done"
-                    : "Add Selected Times to Multiple Days"}
-                </Button>
-              </Grid>
-              <Grid item>
-                {saving ? (
-                  <CircularProgress />
-                ) : (
-                  <Button
-                    color="primary"
-                    variant="contained"
-                    onClick={handleSaveAvailability}
-                    className={classes.button}
-                  >
-                    Save Availability
-                  </Button>
-                )}
-              </Grid>
-            </Grid>
-          </Grid>
+          {selectedDate && showPopup && (
+            <div className="popup">
+              <h4>
+                {activeDay} {month} {year}
+              </h4>
+              {times.map((time, index) => (
+                <div key={index}>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={availabilityState[activeDay][index]}
+                        onChange={() => createTimeHandler(activeDay, index)}
+                      />
+                    }
+                    label={time}
+                  />
+                </div>
+              ))}
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSaveAvailability}
+                disabled={saving}
+              >
+                {saving ? "Sauvegarde en cours..." : "Enregistrer"}
+              </Button>
+            </div>
+          )}
         </Grid>
       </ThemeProvider>
     );

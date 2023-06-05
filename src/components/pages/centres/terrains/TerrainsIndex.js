@@ -14,6 +14,7 @@ import {
   TerrainTitre,
 } from "./TerrainElement";
 import "../../../../css/App.css";
+import { ListElement } from "../../infrastructures/InfrastructureElement";
 
 const TerrainsIndex = () => {
   const { id_centre } = useParams();
@@ -116,7 +117,7 @@ const TerrainsIndex = () => {
       <TerrainList>
         {terrains && terrains.length > 0 ? (
           terrains.map((terrain) => (
-            <li key={terrain._id}>{terrain.nom_terrain}</li>
+            <ListElement key={terrain._id}>{terrain.nom_terrain}</ListElement>
           ))
         ) : (
           <li>Aucun terrain disponible</li>

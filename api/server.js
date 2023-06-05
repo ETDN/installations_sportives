@@ -53,7 +53,15 @@ app.get("/piscines/:id", async (req, res) => {
           as: "bassinsInfo",
         },
       },
-      { $project: { _id: 0, nom_piscine: 1, bassinsInfo: 1 } }, // Inclure les informations des bassins dans le résultat
+      {
+        $lookup: {
+          from: "piscines", // Utiliser la collection "piscines" pour la jointure
+          localField: "id_piscine",
+          foreignField: "id_piscine",
+          as: "piscinesInfo",
+        },
+      },
+      { $project: { _id: 0, nom_piscine: 1, bassinsInfo: 1, piscinesInfo: 1 } }, // Inclure les informations des bassins dans le résultat
     ]);
     if (piscine.length === 0) {
       return res.status(404).json({ error: "Piscine not found" });

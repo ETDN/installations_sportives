@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Container, List, ListElement, Titre } from "./SalleElement";
+import {
+  List,
+  ListElement,
+  Paragraph,
+  Titre,
+} from "../../infrastructures/InfrastructureElement";
+import { ContainerImg, ContainerSalle, IconGym } from "./SalleElement";
 
 const SallesIndex = () => {
   const { id_gym } = useParams();
   const [gym, setGym] = useState(null);
+  const [gyms, setGyms] = useState(null);
   const [salles, setSalles] = useState([]);
 
   useEffect(() => {
@@ -17,6 +24,7 @@ const SallesIndex = () => {
         const data = response.data;
         console.log("Gym data:", data);
         setGym(data);
+        setGyms(data.gymsInfo);
         setSalles(data.sallesInfo);
       } catch (error) {
         console.error(error);
@@ -31,10 +39,18 @@ const SallesIndex = () => {
   }
 
   console.log("Salles:", salles);
+  console.log("Image:", gym.image);
 
   return (
-    <Container>
+    <ContainerSalle>
       <Titre>Salles de gym</Titre>
+      <Paragraph>
+        Sierre dispose d’une quinzaine de salles de gym situées aux quatre
+        points cardinaux de la ville
+      </Paragraph>
+      <ContainerImg>
+        <IconGym src="https://storage.googleapis.com/infrastructures_sportives/gyms.jpeg" />
+      </ContainerImg>
       <List>
         {salles && salles.length > 0 ? (
           salles.map((salle) => (
@@ -46,7 +62,7 @@ const SallesIndex = () => {
           <ListElement>Aucune salle disponible</ListElement>
         )}
       </List>
-    </Container>
+    </ContainerSalle>
   );
 };
 
