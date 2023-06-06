@@ -36,16 +36,27 @@ export const CalendarContainer = styled.div`
 `;
 
 export const TimeslotsContainer = styled.div`
-  position: absolute;
-  left: 67%;
-  top: 45%;
   column-count: 4; /* Affiche les timeslots sur 2 colonnes */
   column-gap: 20px; /* Espacement horizontal entre les colonnes */
-  margin-top: 20px; /* Espace entre le calendrier et les créneaux horaires */
+  margin-top: 30px;
+  margin-bottom: 30px;
+  overflow: scroll;
 `;
 
-export const TimeslotsItem = styled.li`
-  font-size: 0.8rem;
+export const TimeslotsItem = styled.p`
+  text-align: center;
+  justify-content: space-evenly;
+  background-color: #d3d3d3;
+  padding-top: 5px;
+  margin-bottom: 10px;
+  height: 30px;
+  width: 150px;
+  border-radius: 20px;
+  font-size: 1rem;
+
+  &:hover {
+    background-color: #7393b3;
+  }
 `;
 
 export const Button = styled.button`

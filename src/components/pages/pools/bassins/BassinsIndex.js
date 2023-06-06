@@ -108,22 +108,19 @@ const BassinsIndex = () => {
             onRequestClose={() => setIsPopupOpen(false)}
           >
             <h2>Timeslots for {selectedDate}</h2>
-            <TimeslotsItem>
+            <TimeslotsContainer>
               {piscines.length > 0 && piscines[0]?.timeslots.length > 0 ? (
                 piscines[0].timeslots.map((timeslot, index) => (
                   <div key={index}>
-                    <p>
+                    <TimeslotsItem>
                       {timeslot.start_time} - {timeslot.end_time}
-                    </p>
-                    <p>
-                      {timeslot.is_available ? "Available" : "Not available"}
-                    </p>
+                    </TimeslotsItem>
                   </div>
                 ))
               ) : (
                 <p>No timeslots available</p>
               )}
-            </TimeslotsItem>
+            </TimeslotsContainer>
             <Button onClick={() => setIsPopupOpen(false)}>Close</Button>
           </Modal>
         </TimeslotsContainer>
