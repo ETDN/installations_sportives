@@ -1,38 +1,51 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import Modal from "react-modal";
 
-import {
-  H1,
-  Icon,
-  List,
-  ListElement,
-  Paragraph,
-  Titre,
-} from "../../infrastructures/InfrastructureElement";
+import { Paragraph, Titre } from "../../infrastructures/InfrastructureElement";
 import {
   BassinContainer,
+  Button,
   CalendarContainer,
   ContainerImg,
   DescriptionContainer,
+  InfoContainer,
+  TimeslotsContainer,
+  TimeslotsItem,
+  Popup,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
-import CalendarTemplate from "../../../calendar";
+import Calendrier from "../../calendrier";
 
 const BassinsIndex = () => {
   const { id_piscine } = useParams();
   const [piscine, setPiscine] = useState(null);
-  const [bassins, setBassins] = useState([]);
   const [piscines, setPiscines] = useState(null);
+  const [selectedTimeslot, setSelectedTimeslot] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
 
-  const [availability, setAvailability] = useState([]);
-  const Calendar = CalendarTemplate({
-    availability,
-    setAvailability,
-  });
+  const handleTimeslotSelection = (timeslot) => {
+    setSelectedTimeslot(timeslot);
+    setIsPopupOpen(true);
+  };
+
+  const handleDateSelection = (date) => {
+    setSelectedDate(date);
+    console.log(date);
+    setIsPopupOpen(true);
+  };
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   useEffect(() => {
-    // Récupérer les détails de la piscine en fonction de l'ID dans l'URL depuis votre backend
     const fetchPiscine = async () => {
       try {
         const response = await axios.get(
@@ -40,11 +53,7 @@ const BassinsIndex = () => {
         );
         const data = response.data;
         setPiscine(data);
-        // Accéder aux bassins à partir de la propriété "bassinsInfo" dans les données
-        setBassins(data.bassinsInfo); // Update this line
         setPiscines(data.piscinesInfo);
-
-        console.log("Données bassins : ", data.bassinsInfo);
       } catch (error) {
         // Gérer les erreurs
       }
@@ -57,46 +66,67 @@ const BassinsIndex = () => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <BassinContainer>
-      <ContainerImg>
-        <Titre>{piscine.nom_piscine}</Titre>
-        <IconGym
-          src={piscines && piscines.length > 0 ? piscines[0].image : ""}
-        />
+  const handleConfirmButtonClick = () => {
+    // Vérifiez si un timeslot est sélectionné
+    if (selectedTimeslot) {
+      // Mettez à jour l'attribut "is_available" du timeslot en false
+      selectedTimeslot.is_available = false;
+      // Mettez à jour la base de données ou effectuez toute autre action requise
+      // ...
 
-        {/* <List>
-          {bassins && bassins.length > 0 ? (
-            bassins.map((bassin) => (
-              <ListElement key={bassin._id}>{bassin.nom_bassin}</ListElement>
-            ))
-          ) : (
-            <ListElement>Aucune salle disponible</ListElement>
-          )}
-        </List> */}
-        <DescriptionContainer>
-          <Paragraph>
-            {" "}
-            {piscines && piscines.length > 0
-              ? piscines[0].description
-              : "No description available"}
-          </Paragraph>
-        </DescriptionContainer>
-      </ContainerImg>
-      <CalendarContainer>
-        <Calendar
-          availability={availability}
-          setAvailability={setAvailability}
-          primaryColor="#DF1B1B"
-          secondaryColor="#47b2a2"
-          fontFamily="Roboto"
-          fontSize={12}
-          primaryFontColor="#222222"
-          startTime="8:00"
-          endTime="22:00"
-        />
-      </CalendarContainer>
-    </BassinContainer>
+      // Réinitialisez l'état selectedTimeslot
+      setSelectedTimeslot(null);
+    }
+  };
+
+  return (
+    <>
+      <BassinContainer>
+        <ContainerImg>
+          <h1>{piscine.nom_piscine}</h1>
+          <IconGym
+            src={piscines && piscines.length > 0 ? piscines[0].image : ""}
+          />
+
+          <DescriptionContainer>
+            <p>
+              {piscines && piscines.length > 0
+                ? piscines[0].description
+                : "No description available"}
+            </p>
+          </DescriptionContainer>
+        </ContainerImg>
+      </BassinContainer>
+      <InfoContainer>
+        <CalendarContainer>
+          <Calendrier onDateSelect={handleDateSelection} />
+        </CalendarContainer>
+        <TimeslotsContainer>
+          <Button onClick={handleOpenPopup}>Open Popup</Button>
+
+          <Modal isOpen={isPopupOpen} onRequestClose={handleClosePopup}>
+            <h2>Timeslots for {selectedDate}</h2>
+            <TimeslotsItem>
+              {piscines.length > 0 && piscines[0]?.timeslots.length > 0 ? (
+                piscines[0].timeslots.map((timeslot, index) => (
+                  <div key={index}>
+                    <p>
+                      {timeslot.start_time} - {timeslot.end_time}
+                    </p>
+                    <p>
+                      {timeslot.is_available ? "Available" : "Not available"}
+                    </p>
+                  </div>
+                ))
+              ) : (
+                <p>No timeslots available</p>
+              )}
+            </TimeslotsItem>
+            <Button onClick={handleClosePopup}>Close</Button>
+          </Modal>
+        </TimeslotsContainer>
+      </InfoContainer>
+    </>
   );
 };
 
