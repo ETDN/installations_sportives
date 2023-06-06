@@ -26,6 +26,7 @@ export const ContainerImg = styled.div`
 
 export const DescriptionContainer = styled.div`
   background-color: burlywood;
+  font-size: 1rem;
 `;
 
 export const CalendarContainer = styled.div`

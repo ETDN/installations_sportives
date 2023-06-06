@@ -33,7 +33,6 @@ const BassinsIndex = () => {
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-    console.log(date);
     setIsPopupOpen(true);
   };
 
@@ -104,7 +103,10 @@ const BassinsIndex = () => {
         <TimeslotsContainer>
           <Button onClick={handleOpenPopup}>Open Popup</Button>
 
-          <Modal isOpen={isPopupOpen} onRequestClose={handleClosePopup}>
+          <Modal
+            isOpen={isPopupOpen}
+            onRequestClose={() => setIsPopupOpen(false)}
+          >
             <h2>Timeslots for {selectedDate}</h2>
             <TimeslotsItem>
               {piscines.length > 0 && piscines[0]?.timeslots.length > 0 ? (
@@ -122,7 +124,7 @@ const BassinsIndex = () => {
                 <p>No timeslots available</p>
               )}
             </TimeslotsItem>
-            <Button onClick={handleClosePopup}>Close</Button>
+            <Button onClick={() => setIsPopupOpen(false)}>Close</Button>
           </Modal>
         </TimeslotsContainer>
       </InfoContainer>
