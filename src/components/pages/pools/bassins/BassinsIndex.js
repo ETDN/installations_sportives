@@ -3,7 +3,6 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
 
-import { Paragraph, Titre } from "../../infrastructures/InfrastructureElement";
 import {
   BassinContainer,
   Button,
@@ -18,30 +17,32 @@ import {
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
 
+Modal.setAppElement("#root");
+
 const BassinsIndex = () => {
   const { id_piscine } = useParams();
   const [piscine, setPiscine] = useState(null);
   const [piscines, setPiscines] = useState(null);
-  const [selectedTimeslot, setSelectedTimeslot] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedTimeslots, setSelectedTimeslots] = useState([]);
 
   const handleTimeslotSelection = (timeslot) => {
-    setSelectedTimeslot(timeslot);
-    setIsPopupOpen(true);
-  };
+    setSelectedTimeslots((prevTimeslots) => {
+      const timeslotIndex = prevTimeslots.findIndex(
+        (t) => t.id === timeslot.id
+      );
 
-  const handleDateSelection = (date) => {
-    setSelectedDate(date);
-    setIsPopupOpen(true);
-  };
-
-  const handleOpenPopup = () => {
-    setIsPopupOpen(true);
-  };
-
-  const handleClosePopup = () => {
-    setIsPopupOpen(false);
+      if (timeslotIndex > -1) {
+        // Le timeslot est déjà sélectionné, le retirer du tableau
+        const updatedTimeslots = [...prevTimeslots];
+        updatedTimeslots.splice(timeslotIndex, 1);
+        return updatedTimeslots;
+      } else {
+        // Le timeslot n'est pas encore sélectionné, l'ajouter au tableau
+        return [...prevTimeslots, timeslot];
+      }
+    });
   };
 
   useEffect(() => {
@@ -61,20 +62,56 @@ const BassinsIndex = () => {
     fetchPiscine();
   }, [id_piscine]);
 
-  if (!piscine) {
-    return <div>Loading...</div>;
-  }
+  const handleDateSelection = (date) => {
+    setSelectedDate(date);
+    setIsPopupOpen(true);
+  };
 
-  const handleConfirmButtonClick = () => {
-    // Vérifiez si un timeslot est sélectionné
-    if (selectedTimeslot) {
-      // Mettez à jour l'attribut "is_available" du timeslot en false
-      selectedTimeslot.is_available = false;
-      // Mettez à jour la base de données ou effectuez toute autre action requise
-      // ...
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true);
+  };
 
-      // Réinitialisez l'état selectedTimeslot
-      setSelectedTimeslot(null);
+  const handleClosePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handleSaveButtonClick = async () => {
+    console.log("ntm");
+    if (selectedTimeslots.length > 0) {
+      try {
+        const response = await axios.put(
+          "http://localhost:3001/update-timeslots",
+          {
+            timeslots: selectedTimeslots.map((timeslot) => ({
+              id: timeslot.id,
+              is_available: timeslot.is_available,
+            })),
+          },
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        // Effectuer d'autres actions après la mise à jour réussie
+        // ...
+      } catch (error) {
+        console.log(error);
+        console.log(error.message);
+        console.log(error.response);
+      }
+    }
+
+    if (selectedDate) {
+      console.log("Date sélectionnée :", selectedDate);
+    }
+
+    if (selectedTimeslots.length > 0) {
+      console.log("Timeslots sélectionnés :");
+      selectedTimeslots.forEach((timeslot) => {
+        console.log(" - ", timeslot.start_time, "-", timeslot.end_time);
+      });
     }
   };
 
@@ -82,7 +119,7 @@ const BassinsIndex = () => {
     <>
       <BassinContainer>
         <ContainerImg>
-          <h1>{piscine.nom_piscine}</h1>
+          <h1>{piscine && piscine.nom_piscine}</h1>
           <IconGym
             src={piscines && piscines.length > 0 ? piscines[0].image : ""}
           />
@@ -103,16 +140,20 @@ const BassinsIndex = () => {
         <TimeslotsContainer>
           <Button onClick={handleOpenPopup}>Open Popup</Button>
 
-          <Modal
-            isOpen={isPopupOpen}
-            onRequestClose={() => setIsPopupOpen(false)}
-          >
+          <Modal isOpen={isPopupOpen} onRequestClose={handleClosePopup}>
             <h2>Timeslots for {selectedDate}</h2>
             <TimeslotsContainer>
-              {piscines.length > 0 && piscines[0]?.timeslots.length > 0 ? (
+              {piscines &&
+              piscines.length > 0 &&
+              piscines[0]?.timeslots.length > 0 ? (
                 piscines[0].timeslots.map((timeslot, index) => (
                   <div key={index}>
-                    <TimeslotsItem>
+                    <TimeslotsItem
+                      className={
+                        selectedTimeslots.includes(timeslot) ? "selected" : ""
+                      }
+                      onClick={() => handleTimeslotSelection(timeslot)}
+                    >
                       {timeslot.start_time} - {timeslot.end_time}
                     </TimeslotsItem>
                   </div>
@@ -121,7 +162,7 @@ const BassinsIndex = () => {
                 <p>No timeslots available</p>
               )}
             </TimeslotsContainer>
-            <Button onClick={() => setIsPopupOpen(false)}>Close</Button>
+            <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
           </Modal>
         </TimeslotsContainer>
       </InfoContainer>

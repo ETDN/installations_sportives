@@ -1,9 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const { eventWrapper } = require("@testing-library/user-event/dist/utils");
+const socketIO = require("socket.io");
 
 const app = express();
+const server = require("http").Server(app); // Créez un serveur HTTP avec Express
 
 app.use(cors());
 app.use(express.json());
@@ -24,7 +25,6 @@ const Bassin = require("./models/BassinsModel");
 const Gym = require("./models/GymsModel");
 const Salle = require("./models/SallesModel");
 const Terrain = require("./models/TerrainsModel");
-
 //if we make a request to localhost 3001/todos it's gonna to find our todos and find our model
 app.get("/infrastructures", async (req, res) => {
   const infrastructures = await Infrastructure.find();
@@ -67,6 +67,46 @@ app.get("/piscines/:id", async (req, res) => {
       return res.status(404).json({ error: "Piscine not found" });
     }
     res.json(piscine[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.put("/save-reservation", async (req, res) => {
+  const { piscineId, date, timeslots, client } = req.body;
+
+  try {
+    // Find the piscine with the matching piscineId
+    const piscine = await Piscine.findOne({ id_piscine: piscineId });
+
+    if (!piscine) {
+      return res.status(404).json({ error: "Piscine not found" });
+    }
+
+    // Find the matching timeslot within the piscine
+    const timeslot = piscine.timeslots.find(
+      (slot) => slot.start_time === timeslots.start_time
+    );
+
+    if (!timeslot) {
+      return res.status(404).json({ error: "Timeslot not found" });
+    }
+
+    // Create a new reservation object
+    const reservation = {
+      date,
+      timeslot_id: timeslot.timeslot_id,
+      client,
+    };
+
+    // Add the reservation to the reservations array
+    piscine.reservations.push(reservation);
+
+    // Save the updated document
+    await piscine.save();
+
+    res.sendStatus(200);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });

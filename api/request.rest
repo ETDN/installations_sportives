@@ -35,6 +35,27 @@ GET http://localhost:3001/bassins
 
 GET http://localhost:3001/bassins/2
 
+###
+PUT http://localhost:3001/save-reservation
+Content-Type: application/json
+
+{
+  "piscineId": 1,
+  "date": "2023-06-08",
+  "timeslots": {
+    "start_time": "8:30"
+  },
+  "client": {
+    "nom": "Alice",
+    "adresse": "789 Main Street",
+    "telephone": "555-1234"
+  }
+}
+
+
+
+
+
 
 // ---------------- Sports center queries ----------------------
 ###

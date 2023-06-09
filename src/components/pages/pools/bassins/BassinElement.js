@@ -57,6 +57,10 @@ export const TimeslotsItem = styled.p`
   &:hover {
     background-color: #7393b3;
   }
+
+  &.selected {
+    background-color: red;
+  }
 `;
 
 export const Button = styled.button`
