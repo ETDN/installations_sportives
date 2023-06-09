@@ -1,10 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const socketIO = require("socket.io");
 
 const app = express();
 const server = require("http").Server(app); // Créez un serveur HTTP avec Express
+const { v4: uuidv4 } = require("uuid");
 
 app.use(cors());
 app.use(express.json());
@@ -93,7 +93,7 @@ app.put("/save-reservation", async (req, res) => {
       return res.status(404).json({ error: "Timeslot not found" });
     }
 
-    // Create a new reservation object
+    // Create a new reservation object with generated _id
     const reservation = {
       date,
       timeslot_id: timeslots.timeslot_id,

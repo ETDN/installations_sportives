@@ -40,13 +40,14 @@ PUT http://localhost:3001/save-reservation
 Content-Type: application/json
 
 {
+  
   "piscineId": 1,
   "date": "2023-06-08",
   "timeslots": {
-    "timeslot_id": 2
+    "timeslot_id": 3
   },
   "client": {
-    "nom": "Alice",
+    "nom": "Emilie",
     "adresse": "789 Main Street",
     "telephone": "555-1234"
   }

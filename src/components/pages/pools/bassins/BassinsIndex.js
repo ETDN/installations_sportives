@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import Modal from "react-modal";
+import moment from "moment";
+import "moment/locale/fr";
 
 import {
   BassinContainer,
@@ -80,7 +82,7 @@ const BassinsIndex = () => {
     if (selectedTimeslots.length > 0) {
       try {
         const response = await axios.put(
-          "http://localhost:3001/update-timeslots",
+          "http://localhost:3001/save-reservation",
           {
             timeslots: selectedTimeslots.map((timeslot) => ({
               id: timeslot.id,
@@ -104,7 +106,8 @@ const BassinsIndex = () => {
     }
 
     if (selectedDate) {
-      console.log("Date sélectionnée :", selectedDate);
+      const formattedDate = moment(selectedDate).format("DD/MM/YYYY");
+      console.log("Date sélectionnée :", formattedDate);
     }
 
     if (selectedTimeslots.length > 0) {
