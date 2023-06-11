@@ -132,6 +132,18 @@ const BassinsIndex = () => {
           <IconGym
             src={piscines && piscines.length > 0 ? piscines[0].image : ""}
           />
+          <GridContainer>
+            <AddressTitle>{piscine && piscine.nom_piscine}</AddressTitle>
+            <AdressElement>
+              Rue de Guillamo 3
+              <br />
+              3960 Sierre
+              <br />
+              027 452 02 70
+              <br />
+              piscine@sierre.ch
+            </AdressElement>
+          </GridContainer>
         </WrapperImg>
         <WrapperDescription>
           <DescriptionContainer>
@@ -142,20 +154,18 @@ const BassinsIndex = () => {
             </p>
           </DescriptionContainer>
         </WrapperDescription>
-        <GridContainer>
-          <AddressTitle>{piscine && piscine.nom_piscine}</AddressTitle>
-          <AdressElement>
-            Rue de Guillamo 3
-            <br />
-            3960 Sierre
-            <br />
-            027 452 02 70
-            <br />
-            piscine@sierre.ch
-          </AdressElement>
-        </GridContainer>
+        <h3>Période d'exploitation 2022-2022</h3>
+        <p>Fermeture le dimanche 21 mai 2023</p>
+        <p>Réouverture dès le mercredi 6 septembre 2023</p>
+
+        <h3>Horaires d'ouverture</h3>
+        <p>Lundi: 10h00 - 13h00</p>
+        <p>Mardi à vendredi: 10h00 - 21h00</p>
       </ContainerRight>
       <InfoContainer>
+        <div>
+          <h1>Réservations</h1>
+        </div>
         <CalendarContainer>
           <Calendrier onDateSelect={handleDateSelection} />
         </CalendarContainer>

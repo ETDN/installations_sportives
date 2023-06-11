@@ -18,8 +18,8 @@ export const ContainerSalle = styled.div`
 `;
 
 export const IconGym = styled.img`
-  width: 450px;
-  height: 300px;
+  width: 600px;
+  height: 350px;
   cursor: pointer;
 `;
 

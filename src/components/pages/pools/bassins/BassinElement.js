@@ -4,29 +4,20 @@ export const BassinContainer = styled.div`
   display: flex;
 `;
 
-export const InfoContainer = styled.div`
-  width: 50%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  flex-grow: 1;
-`;
-
 export const ContainerRight = styled.div`
   display: flex;
-  width: 45%;
+  width: 50%;
   flex-direction: column;
   padding: 20px;
   border-right: 5px solid #ed0e2e;
 `;
 
 export const WrapperImg = styled.div`
-  align-self: center;
+  float: left;
 `;
 
 export const WrapperDescription = styled.div`
   text-align: center;
-  margin-left: 125px;
   margin-top: 20px;
   margin-bottom: 20px;
 `;
@@ -46,6 +37,7 @@ export const DescriptionContainer = styled.div`
 `;
 
 export const GridContainer = styled.div`
+  float: right;
   background-color: #f3f3f3;
   width: 200px;
   padding: 20px;
@@ -63,29 +55,30 @@ export const AdressElement = styled.p`
   font-size: 1rem;
 `;
 
+export const InfoContainer = styled.div`
+  grid-gap: 20px;
+`;
+
 export const CalendarContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
+  margin-top: 120px;
+  width: fit-content;
+  height: fit-content;
+  flex: 1;
 `;
 
 export const TimeslotsContainer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 30px;
-  margin-bottom: 30px;
+  flex: 1;
+  max-height: 300px;
+  overflow-y: auto;
 `;
 
 export const TimeslotsItem = styled.p`
   text-align: center;
-  justify-content: center;
-  align-items: center;
+  max-width: 90px;
   border: 2px solid #d3d3d3;
   padding: 5px 10px;
-  margin: 5px;
-  height: 30px;
-  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-size: 1rem;
 
   &:hover {
     background-color: #7393b3;
