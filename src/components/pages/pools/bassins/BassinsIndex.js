@@ -15,6 +15,12 @@ import {
   TimeslotsContainer,
   TimeslotsItem,
   Popup,
+  GridContainer,
+  AddressTitle,
+  AdressElement,
+  ContainerRight,
+  WrapperImg,
+  WrapperDescription,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -119,14 +125,15 @@ const BassinsIndex = () => {
   };
 
   return (
-    <>
-      <BassinContainer>
-        <ContainerImg>
-          <h1>{piscine && piscine.nom_piscine}</h1>
+    <BassinContainer>
+      <ContainerRight>
+        <h1>{piscine && piscine.nom_piscine}</h1>
+        <WrapperImg>
           <IconGym
             src={piscines && piscines.length > 0 ? piscines[0].image : ""}
           />
-
+        </WrapperImg>
+        <WrapperDescription>
           <DescriptionContainer>
             <p>
               {piscines && piscines.length > 0
@@ -134,42 +141,47 @@ const BassinsIndex = () => {
                 : "No description available"}
             </p>
           </DescriptionContainer>
-        </ContainerImg>
-      </BassinContainer>
+        </WrapperDescription>
+        <GridContainer>
+          <AddressTitle>{piscine && piscine.nom_piscine}</AddressTitle>
+          <AdressElement>
+            Rue de Guillamo 3
+            <br />
+            3960 Sierre
+            <br />
+            027 452 02 70
+            <br />
+            piscine@sierre.ch
+          </AdressElement>
+        </GridContainer>
+      </ContainerRight>
       <InfoContainer>
         <CalendarContainer>
           <Calendrier onDateSelect={handleDateSelection} />
         </CalendarContainer>
         <TimeslotsContainer>
-          <Button onClick={handleOpenPopup}>Open Popup</Button>
-
-          <Modal isOpen={isPopupOpen} onRequestClose={handleClosePopup}>
-            <h2>Timeslots for {selectedDate}</h2>
-            <TimeslotsContainer>
-              {piscines &&
-              piscines.length > 0 &&
-              piscines[0]?.timeslots.length > 0 ? (
-                piscines[0].timeslots.map((timeslot, index) => (
-                  <div key={index}>
-                    <TimeslotsItem
-                      className={
-                        selectedTimeslots.includes(timeslot) ? "selected" : ""
-                      }
-                      onClick={() => handleTimeslotSelection(timeslot)}
-                    >
-                      {timeslot.start_time} - {timeslot.end_time}
-                    </TimeslotsItem>
-                  </div>
-                ))
-              ) : (
-                <p>No timeslots available</p>
-              )}
-            </TimeslotsContainer>
-            <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
-          </Modal>
+          {piscines &&
+          piscines.length > 0 &&
+          piscines[0]?.timeslots.length > 0 ? (
+            piscines[0].timeslots.map((timeslot, index) => (
+              <div key={index}>
+                <TimeslotsItem
+                  className={
+                    selectedTimeslots.includes(timeslot) ? "selected" : ""
+                  }
+                  onClick={() => handleTimeslotSelection(timeslot)}
+                >
+                  {timeslot.start_time} - {timeslot.end_time}
+                </TimeslotsItem>
+              </div>
+            ))
+          ) : (
+            <p>No timeslots available</p>
+          )}
         </TimeslotsContainer>
+        <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
       </InfoContainer>
-    </>
+    </BassinContainer>
   );
 };
 

@@ -1,76 +1,115 @@
 import styled from "styled-components";
 
-export const BassinContainer = styled.div``;
-
-export const InfoContainer = styled.div`
+export const BassinContainer = styled.div`
   display: flex;
-  flex-direction: column;
 `;
 
-export const ContainerImg = styled.div`
-  width: 55%;
-  float: left;
-  padding: 20px;
+export const InfoContainer = styled.div`
+  width: 50%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-grow: 1;
+`;
 
-  :after {
-    content: "";
-    background-color: rgb(237, 14, 46);
-    position: absolute;
-    width: 5px;
-    height: 700px;
-    top: 10px;
-    left: 57%;
-    display: block;
-  }
+export const ContainerRight = styled.div`
+  display: flex;
+  width: 45%;
+  flex-direction: column;
+  padding: 20px;
+  border-right: 5px solid #ed0e2e;
+`;
+
+export const WrapperImg = styled.div`
+  align-self: center;
+`;
+
+export const WrapperDescription = styled.div`
+  text-align: center;
+  margin-left: 125px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 `;
 
 export const DescriptionContainer = styled.div`
-  background-color: burlywood;
+  border: 1px solid lightgray;
+  text-align: left;
+  font-size: 1rem;
+  max-width: 600px;
+  max-height: fit-content; /* Adjust the value to control the number of lines */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5rem; /* Adjust the line height for proper spacing */
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+`;
+
+export const GridContainer = styled.div`
+  background-color: #f3f3f3;
+  width: 200px;
+  padding: 20px;
+  margin-top: 20px;
+  text-align: center;
+`;
+
+export const AddressTitle = styled.h3`
+  text-align: center;
+  font-size: 1.2rem;
+`;
+
+export const AdressElement = styled.p`
+  text-align: center;
   font-size: 1rem;
 `;
 
 export const CalendarContainer = styled.div`
-  position: absolute;
-  left: 67%;
-  margin-top: 20px; /* Espace entre la description et le calendrier */
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 `;
 
 export const TimeslotsContainer = styled.div`
-  column-count: 4; /* Affiche les timeslots sur 2 colonnes */
-  column-gap: 20px; /* Espacement horizontal entre les colonnes */
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   margin-top: 30px;
   margin-bottom: 30px;
-  overflow: scroll;
 `;
 
 export const TimeslotsItem = styled.p`
   text-align: center;
-  justify-content: space-evenly;
-  background-color: #d3d3d3;
-  padding-top: 5px;
-  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #d3d3d3;
+  padding: 5px 10px;
+  margin: 5px;
   height: 30px;
-  width: 150px;
-  border-radius: 20px;
-  font-size: 1rem;
+  font-size: 1.1rem;
 
   &:hover {
     background-color: #7393b3;
+    color: white;
   }
 
   &.selected {
-    background-color: red;
+    background-color: #ed0e2e;
+    color: white;
   }
 `;
 
 export const Button = styled.button`
-  background-color: #4caf50; /* Couleur de fond */
-  color: white; /* Couleur du texte */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4caf50;
+  color: white;
+  width: fit-content;
   height: 50px;
-  padding: 10px 20px; /* Espacement intérieur */
-  border: none; /* Supprime les bordures */
-  border-radius: 4px; /* Arrondi des coins */
-  cursor: pointer; /* Curseur au survol */
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
 `;
 
 export const TerrainInfo = styled.div``;

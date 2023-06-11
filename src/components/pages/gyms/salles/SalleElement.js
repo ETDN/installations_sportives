@@ -18,17 +18,9 @@ export const ContainerSalle = styled.div`
 `;
 
 export const IconGym = styled.img`
-  width: 600px;
-  height: 350px;
-  aspect-ratio: 1;
-  outline: calc(400px / 2) solid #0009;
-  outline-offset: calc(400px / -2);
+  width: 450px;
+  height: 300px;
   cursor: pointer;
-
-  &:hover {
-    outline: 4px;
-    outline-offset: 2px;
-  }
 `;
 
 export const Titre = styled.h1`
