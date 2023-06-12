@@ -114,4 +114,38 @@ export const Button = styled.button`
   cursor: pointer;
 `;
 
+export const PopupContainer = styled.div`
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+
+  input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+
+  button {
+    padding: 8px 16px;
+    margin-right: 10px;
+    border-radius: 4px;
+    border: none;
+    color: white;
+    background-color: #007bff;
+    cursor: pointer;
+  }
+`;
+
 export const TerrainInfo = styled.div``;

@@ -9,18 +9,14 @@ import {
   BassinContainer,
   Button,
   CalendarContainer,
-  ContainerImg,
   DescriptionContainer,
   InfoContainer,
   TimeslotsContainer,
   TimeslotsItem,
-  Popup,
-  GridContainer,
-  AddressTitle,
-  AdressElement,
   ContainerRight,
   WrapperImg,
   WrapperDescription,
+  PopupContainer,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -34,6 +30,19 @@ const BassinsIndex = () => {
   const [selectedDate, setSelectedDate] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedTimeslots, setSelectedTimeslots] = useState([]);
+  const [clientInfo, setClientInfo] = useState({
+    nom: "",
+    adresse: "",
+    telephone: "",
+  });
+
+  const handleClientInfoChange = (event) => {
+    const { name, value } = event.target;
+    setClientInfo((prevClientInfo) => ({
+      ...prevClientInfo,
+      [name]: value,
+    }));
+  };
 
   const handleTimeslotSelection = (timeslot) => {
     setSelectedTimeslots((prevTimeslots) => {
@@ -72,11 +81,6 @@ const BassinsIndex = () => {
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-    setIsPopupOpen(true);
-  };
-
-  const handleOpenPopup = () => {
-    setIsPopupOpen(true);
   };
 
   const handleClosePopup = () => {
@@ -84,43 +88,40 @@ const BassinsIndex = () => {
   };
 
   const handleSaveButtonClick = async () => {
-    console.log("ntm");
     if (selectedTimeslots.length > 0) {
-      try {
-        const response = await axios.put(
-          "http://localhost:3001/save-reservation",
-          {
-            timeslots: selectedTimeslots.map((timeslot) => ({
-              id: timeslot.id,
-              is_available: timeslot.is_available,
-            })),
+      // Afficher le popup
+      setIsPopupOpen(true);
+    } else {
+      console.log("Aucun créneau horaire sélectionné");
+    }
+  };
+
+  const handleSaveReservation = async () => {
+    try {
+      const response = await axios.put(
+        "http://localhost:3001/save-reservation",
+        {
+          piscineId: id_piscine,
+          date: selectedDate,
+          timeslots: selectedTimeslots,
+          client: clientInfo,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
           },
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        }
+      );
 
-        // Effectuer d'autres actions après la mise à jour réussie
-        // ...
-      } catch (error) {
-        console.log(error);
-        console.log(error.message);
-        console.log(error.response);
-      }
-    }
+      // Effectuer d'autres actions après la mise à jour réussie
+      // ...
 
-    if (selectedDate) {
-      const formattedDate = moment(selectedDate).format("DD/MM/YYYY");
-      console.log("Date sélectionnée :", formattedDate);
-    }
-
-    if (selectedTimeslots.length > 0) {
-      console.log("Timeslots sélectionnés :");
-      selectedTimeslots.forEach((timeslot) => {
-        console.log(" - ", timeslot.start_time, "-", timeslot.end_time);
-      });
+      // Fermer le popup
+      setIsPopupOpen(false);
+    } catch (error) {
+      console.log(error);
+      console.log(error.message);
+      console.log(error.response);
     }
   };
 
@@ -191,6 +192,34 @@ const BassinsIndex = () => {
         </TimeslotsContainer>
         <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
       </InfoContainer>
+      {isPopupOpen && (
+        <PopupContainer>
+          <h2>Informations du client</h2>
+          <input
+            type="text"
+            name="nom"
+            placeholder="Nom"
+            value={clientInfo.nom}
+            onChange={handleClientInfoChange}
+          />
+          <input
+            type="text"
+            name="adresse"
+            placeholder="Adresse"
+            value={clientInfo.adresse}
+            onChange={handleClientInfoChange}
+          />
+          <input
+            type="text"
+            name="telephone"
+            placeholder="Téléphone"
+            value={clientInfo.telephone}
+            onChange={handleClientInfoChange}
+          />
+          <button onClick={handleClosePopup}>Annuler</button>
+          <button onClick={handleSaveReservation}>Sauvegarder</button>
+        </PopupContainer>
+      )}
     </BassinContainer>
   );
 };
