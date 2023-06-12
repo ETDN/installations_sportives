@@ -35,6 +35,11 @@ const BassinsIndex = () => {
     adresse: "",
     telephone: "",
   });
+  const [timeslotInfo, setTimeslotInfo] = useState({
+    timeslot_id: "",
+    start_time: "",
+    end_time: "",
+  });
 
   const handleClientInfoChange = (event) => {
     const { name, value } = event.target;
@@ -47,8 +52,14 @@ const BassinsIndex = () => {
   const handleTimeslotSelection = (timeslot) => {
     setSelectedTimeslots((prevTimeslots) => {
       const timeslotIndex = prevTimeslots.findIndex(
-        (t) => t.id === timeslot.id
+        (t) => t.timeslot_id === timeslot.timeslot_id
       );
+
+      timeslotInfo.timeslot_id = timeslot.timeslot_id;
+      timeslotInfo.start_time = timeslot.start_time;
+      timeslotInfo.end_time = timeslot.end_time;
+
+      console.log(timeslotInfo.timeslot_id);
 
       if (timeslotIndex > -1) {
         // Le timeslot est déjà sélectionné, le retirer du tableau
@@ -81,6 +92,7 @@ const BassinsIndex = () => {
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
+    console.log(date);
   };
 
   const handleClosePopup = () => {
@@ -103,7 +115,11 @@ const BassinsIndex = () => {
         {
           piscineId: id_piscine,
           date: selectedDate,
-          timeslots: selectedTimeslots,
+          timeslots: {
+            timeslot_id: selectedTimeslots[0].timeslot_id,
+            start_time: selectedTimeslots[0].start_time,
+            end_time: selectedTimeslots[0].end_time,
+          },
           client: clientInfo,
         },
         {

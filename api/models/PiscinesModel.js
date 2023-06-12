@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const timeslotSchema = new mongoose.Schema({
+  timeslot_id: Number, // Assurez-vous que le type est Number
   start_time: String,
   end_time: String,
   is_available: Boolean,
@@ -19,7 +20,11 @@ const reservationSchema = new mongoose.Schema({
   },
   date: Date,
   bassin_id: Number,
-  timeslot_id: Number,
+  timeslot: {
+    timeslot_id: Number,
+    start_time: String,
+    end_time: String,
+  },
   client: [clientSchema],
 });
 

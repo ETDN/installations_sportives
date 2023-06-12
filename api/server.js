@@ -86,7 +86,7 @@ app.put("/save-reservation", async (req, res) => {
 
     // Find the matching timeslot within the piscine
     const timeslot = piscine.timeslots.find(
-      (slot) => slot.timeslot_id === timeslots.start_time
+      (slot) => slot.timeslot_id === timeslots.timeslot_id
     );
 
     if (!timeslot) {
@@ -96,7 +96,11 @@ app.put("/save-reservation", async (req, res) => {
     // Create a new reservation object with generated _id
     const reservation = {
       date,
-      timeslot_id: timeslots.timeslot_id,
+      timeslot: {
+        timeslot_id: timeslots.timeslot_id,
+        start_time: timeslots.start_time,
+        end_time: timeslots.end_time,
+      },
       client,
     };
 
