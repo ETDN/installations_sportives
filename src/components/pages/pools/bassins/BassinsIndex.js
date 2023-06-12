@@ -132,7 +132,7 @@ const BassinsIndex = () => {
           <IconGym
             src={piscines && piscines.length > 0 ? piscines[0].image : ""}
           />
-          <GridContainer>
+          {/* <GridContainer>
             <AddressTitle>{piscine && piscine.nom_piscine}</AddressTitle>
             <AdressElement>
               Rue de Guillamo 3
@@ -143,7 +143,7 @@ const BassinsIndex = () => {
               <br />
               piscine@sierre.ch
             </AdressElement>
-          </GridContainer>
+          </GridContainer> */}
         </WrapperImg>
         <WrapperDescription>
           <DescriptionContainer>

@@ -6,7 +6,7 @@ export const BassinContainer = styled.div`
 
 export const ContainerRight = styled.div`
   display: flex;
-  width: 50%;
+  width: 45%;
   flex-direction: column;
   padding: 20px;
   border-right: 5px solid #ed0e2e;
@@ -56,11 +56,16 @@ export const AdressElement = styled.p`
 `;
 
 export const InfoContainer = styled.div`
-  grid-gap: 20px;
+  width: 40%;
+  margin-top: 20px;
+  margin-left: 30px;
 `;
 
 export const CalendarContainer = styled.div`
-  margin-top: 120px;
+  background-color: red;
+  margin-top: 50px;
+  margin-left: 20px;
+  margin-bottom: 30px;
   width: fit-content;
   height: fit-content;
   flex: 1;
@@ -68,6 +73,9 @@ export const CalendarContainer = styled.div`
 
 export const TimeslotsContainer = styled.div`
   flex: 1;
+  margin-top: -330px;
+  margin-right: 60px;
+  float: right;
   max-height: 300px;
   overflow-y: auto;
 `;
@@ -94,6 +102,7 @@ export const TimeslotsItem = styled.p`
 export const Button = styled.button`
   display: flex;
   align-items: center;
+  margin-left: 20px;
   justify-content: center;
   background-color: #4caf50;
   color: white;
