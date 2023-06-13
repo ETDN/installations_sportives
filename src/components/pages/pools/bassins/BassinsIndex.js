@@ -19,7 +19,6 @@ import {
   PopupContainer,
   BassinList,
   ListElement,
-  CheckboxBassin,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -33,16 +32,12 @@ const BassinsIndex = () => {
   const [bassins, setBassins] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedTimeslots, setSelectedTimeslots] = useState([]);
+  const [selectedBassin, setSelectedBassin] = useState(null);
+  const [selectedTimeslot, setSelectedTimeslot] = useState(null);
   const [clientInfo, setClientInfo] = useState({
     nom: "",
     adresse: "",
     telephone: "",
-  });
-  const [timeslotInfo, setTimeslotInfo] = useState({
-    timeslot_id: "",
-    start_time: "",
-    end_time: "",
   });
 
   const handleClientInfoChange = (event) => {
@@ -54,27 +49,7 @@ const BassinsIndex = () => {
   };
 
   const handleTimeslotSelection = (timeslot) => {
-    setSelectedTimeslots((prevTimeslots) => {
-      const timeslotIndex = prevTimeslots.findIndex(
-        (t) => t.timeslot_id === timeslot.timeslot_id
-      );
-
-      timeslotInfo.timeslot_id = timeslot.timeslot_id;
-      timeslotInfo.start_time = timeslot.start_time;
-      timeslotInfo.end_time = timeslot.end_time;
-
-      console.log(timeslotInfo.timeslot_id);
-
-      if (timeslotIndex > -1) {
-        // Le timeslot est déjà sélectionné, le retirer du tableau
-        const updatedTimeslots = [...prevTimeslots];
-        updatedTimeslots.splice(timeslotIndex, 1);
-        return updatedTimeslots;
-      } else {
-        // Le timeslot n'est pas encore sélectionné, l'ajouter au tableau
-        return [...prevTimeslots, timeslot];
-      }
-    });
+    setSelectedTimeslot(timeslot);
   };
 
   useEffect(() => {
@@ -97,7 +72,6 @@ const BassinsIndex = () => {
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-    console.log(date);
   };
 
   const handleClosePopup = () => {
@@ -105,11 +79,11 @@ const BassinsIndex = () => {
   };
 
   const handleSaveButtonClick = async () => {
-    if (selectedTimeslots.length > 0) {
-      // Afficher le popup
+    if (selectedBassin && selectedTimeslot) {
       setIsPopupOpen(true);
+      console.log(selectedBassin.id_bassin);
     } else {
-      console.log("Aucun créneau horaire sélectionné");
+      console.log("Veuillez sélectionner un bassin et un créneau horaire");
     }
   };
 
@@ -118,12 +92,12 @@ const BassinsIndex = () => {
       const response = await axios.put(
         "http://localhost:3001/save-reservation",
         {
-          piscineId: id_piscine,
+          bassinId: selectedBassin.id_bassin,
           date: selectedDate,
           timeslots: {
-            timeslot_id: selectedTimeslots[0].timeslot_id,
-            start_time: selectedTimeslots[0].start_time,
-            end_time: selectedTimeslots[0].end_time,
+            timeslot_id: selectedTimeslot.timeslot_id,
+            start_time: selectedTimeslot.start_time,
+            end_time: selectedTimeslot.end_time,
           },
           client: clientInfo,
         },
@@ -134,9 +108,6 @@ const BassinsIndex = () => {
         }
       );
 
-      // Effectuer d'autres actions après la mise à jour réussie
-      // ...
-
       // Fermer le popup
       setIsPopupOpen(false);
     } catch (error) {
@@ -146,9 +117,9 @@ const BassinsIndex = () => {
     }
   };
 
-  const handleBassinSelection = (bassinId) => {
-    // Logique de sélection du bassin
-    console.log(`Bassin sélectionné : ${bassinId}`);
+  const handleBassinSelection = (bassin) => {
+    setSelectedBassin(bassin);
+    console.log(bassin.id_bassin);
   };
 
   return (
@@ -188,10 +159,11 @@ const BassinsIndex = () => {
           {bassins && bassins.length > 0 ? (
             bassins.map((bassin) => (
               <ListElement key={bassin._id}>
-                <CheckboxBassin
-                  type="checkbox"
-                  checked={bassin.checked}
-                  onChange={() => handleBassinSelection(bassin._id)}
+                <input
+                  type="radio"
+                  name="bassin"
+                  checked={selectedBassin === bassin}
+                  onChange={() => handleBassinSelection(bassin)}
                 />
                 {bassin.nom_bassin}
               </ListElement>
@@ -207,9 +179,7 @@ const BassinsIndex = () => {
             piscines[0].timeslots.map((timeslot, index) => (
               <div key={index}>
                 <TimeslotsItem
-                  className={
-                    selectedTimeslots.includes(timeslot) ? "selected" : ""
-                  }
+                  className={selectedTimeslot === timeslot ? "selected" : ""}
                   onClick={() => handleTimeslotSelection(timeslot)}
                 >
                   {timeslot.start_time} - {timeslot.end_time}
