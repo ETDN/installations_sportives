@@ -40,8 +40,7 @@ PUT http://localhost:3001/save-reservation
 Content-Type: application/json
 
 {
-  
-  "piscineId": 1,
+  "bassinId": 1,
   "date": "2023-06-08",
   "timeslots": {
     "timeslot_id": 2,
@@ -54,6 +53,7 @@ Content-Type: application/json
     "telephone": "555-1234"
   }
 }
+
 
 
 

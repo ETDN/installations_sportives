@@ -74,14 +74,21 @@ app.get("/piscines/:id", async (req, res) => {
 });
 
 app.put("/save-reservation", async (req, res) => {
-  const { piscineId, date, timeslots, client } = req.body;
+  const { bassinId, date, timeslots, client } = req.body;
 
   try {
-    // Find the piscine with the matching piscineId
-    const piscine = await Piscine.findOne({ id_piscine: piscineId });
+    // Find the piscine that contains the specified bassin
+    const piscine = await Piscine.findOne({ bassins: bassinId });
 
     if (!piscine) {
       return res.status(404).json({ error: "Piscine not found" });
+    }
+
+    // Find the specified bassin within the piscine
+    const bassin = piscine.bassins.find((b) => b === bassinId);
+
+    if (!bassin) {
+      return res.status(404).json({ error: "Bassin not found" });
     }
 
     // Find the matching timeslot within the piscine
@@ -96,6 +103,7 @@ app.put("/save-reservation", async (req, res) => {
     // Create a new reservation object with generated _id
     const reservation = {
       date,
+      bassin_id: bassinId,
       timeslot: {
         timeslot_id: timeslots.timeslot_id,
         start_time: timeslots.start_time,
