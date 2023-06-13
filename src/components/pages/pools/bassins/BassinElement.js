@@ -2,14 +2,46 @@ import styled from "styled-components";
 
 export const BassinContainer = styled.div`
   display: flex;
+  flex-wrap: wrap;
+`;
+
+export const BassinList = styled.ul`
+  list-style-type: none;
+  margin-right: 130px;
+  float: right;
+`;
+
+export const BassinImg = styled.img`
+  float: right;
+  margin-bottom: 20px;
+`;
+
+export const ListElement = styled.li`
+  position: relative;
+  margin-left: 100px;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 10px;
+  cursor: pointer;
+  &:hover {
+    color: red;
+  }
+`;
+
+export const CheckboxBassin = styled.input`
+  margin-left: 5px;
 `;
 
 export const ContainerRight = styled.div`
   display: flex;
-  width: 45%;
   flex-direction: column;
   padding: 20px;
   border-right: 5px solid #ed0e2e;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    width: 45%;
+  }
 `;
 
 export const WrapperImg = styled.div`
@@ -27,10 +59,10 @@ export const DescriptionContainer = styled.div`
   text-align: left;
   font-size: 1rem;
   max-width: 600px;
-  max-height: fit-content; /* Adjust the value to control the number of lines */
+  max-height: fit-content;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.5rem; /* Adjust the line height for proper spacing */
+  line-height: 1.5rem;
   padding: 0.5rem;
   margin-bottom: 1rem;
   white-space: pre-wrap;
@@ -39,10 +71,14 @@ export const DescriptionContainer = styled.div`
 export const GridContainer = styled.div`
   float: right;
   background-color: #f3f3f3;
-  width: 200px;
+  width: 100%;
   padding: 20px;
   margin-top: 20px;
   text-align: center;
+
+  @media (min-width: 768px) {
+    width: 200px;
+  }
 `;
 
 export const AddressTitle = styled.h3`
@@ -50,15 +86,18 @@ export const AddressTitle = styled.h3`
   font-size: 1.2rem;
 `;
 
-export const AdressElement = styled.p`
+export const AddressElement = styled.p`
   text-align: center;
   font-size: 1rem;
 `;
 
 export const InfoContainer = styled.div`
-  width: 40%;
   margin-top: 20px;
   margin-left: 30px;
+
+  @media (min-width: 768px) {
+    width: 35%;
+  }
 `;
 
 export const CalendarContainer = styled.div`
@@ -69,15 +108,24 @@ export const CalendarContainer = styled.div`
   width: fit-content;
   height: fit-content;
   flex: 1;
+
+  @media screen and (max-width: 480px) {
+    margin-top: 0;
+    margin-left: 0;
+    margin-bottom: 0;
+    width: 50%;
+    height: 200px;
+  }
 `;
 
 export const TimeslotsContainer = styled.div`
-  flex: 1;
-  margin-top: -330px;
-  margin-right: 60px;
-  float: right;
+  margin-left: 20px;
   max-height: 300px;
   overflow-y: auto;
+
+  @media (min-width: 768px) {
+    height: 200px;
+  }
 `;
 
 export const TimeslotsItem = styled.p`
@@ -101,6 +149,7 @@ export const TimeslotsItem = styled.p`
 
 export const Button = styled.button`
   display: flex;
+  margin-top: 20px;
   align-items: center;
   margin-left: 20px;
   justify-content: center;

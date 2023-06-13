@@ -17,6 +17,9 @@ import {
   WrapperImg,
   WrapperDescription,
   PopupContainer,
+  BassinList,
+  ListElement,
+  CheckboxBassin,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -27,6 +30,7 @@ const BassinsIndex = () => {
   const { id_piscine } = useParams();
   const [piscine, setPiscine] = useState(null);
   const [piscines, setPiscines] = useState(null);
+  const [bassins, setBassins] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedTimeslots, setSelectedTimeslots] = useState([]);
@@ -82,6 +86,7 @@ const BassinsIndex = () => {
         const data = response.data;
         setPiscine(data);
         setPiscines(data.piscinesInfo);
+        setBassins(data.bassinsInfo);
       } catch (error) {
         // Gérer les erreurs
       }
@@ -141,6 +146,11 @@ const BassinsIndex = () => {
     }
   };
 
+  const handleBassinSelection = (bassinId) => {
+    // Logique de sélection du bassin
+    console.log(`Bassin sélectionné : ${bassinId}`);
+  };
+
   return (
     <BassinContainer>
       <ContainerRight>
@@ -149,18 +159,6 @@ const BassinsIndex = () => {
           <IconGym
             src={piscines && piscines.length > 0 ? piscines[0].image : ""}
           />
-          {/* <GridContainer>
-            <AddressTitle>{piscine && piscine.nom_piscine}</AddressTitle>
-            <AdressElement>
-              Rue de Guillamo 3
-              <br />
-              3960 Sierre
-              <br />
-              027 452 02 70
-              <br />
-              piscine@sierre.ch
-            </AdressElement>
-          </GridContainer> */}
         </WrapperImg>
         <WrapperDescription>
           <DescriptionContainer>
@@ -186,6 +184,22 @@ const BassinsIndex = () => {
         <CalendarContainer>
           <Calendrier onDateSelect={handleDateSelection} />
         </CalendarContainer>
+        <BassinList>
+          {bassins && bassins.length > 0 ? (
+            bassins.map((bassin) => (
+              <ListElement key={bassin._id}>
+                <CheckboxBassin
+                  type="checkbox"
+                  checked={bassin.checked}
+                  onChange={() => handleBassinSelection(bassin._id)}
+                />
+                {bassin.nom_bassin}
+              </ListElement>
+            ))
+          ) : (
+            <li>Aucun bassin disponible</li>
+          )}
+        </BassinList>
         <TimeslotsContainer>
           {piscines &&
           piscines.length > 0 &&
