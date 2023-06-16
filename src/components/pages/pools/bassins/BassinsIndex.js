@@ -125,7 +125,6 @@ const BassinsIndex = () => {
   return (
     <BassinContainer>
       <ContainerRight>
-        <h1>{piscine && piscine.nom_piscine}</h1>
         <WrapperImg>
           <IconGym
             src={piscines && piscines.length > 0 ? piscines[0].image : ""}
@@ -150,8 +149,26 @@ const BassinsIndex = () => {
       </ContainerRight>
       <InfoContainer>
         <div>
-          <h1>Réservations</h1>
+          <h1>{piscine && piscine.nom_piscine}</h1>
         </div>
+        <TimeslotsContainer>
+          {piscines &&
+          piscines.length > 0 &&
+          piscines[0]?.timeslots.length > 0 ? (
+            piscines[0].timeslots.map((timeslot, index) => (
+              <div key={index}>
+                <TimeslotsItem
+                  className={selectedTimeslot === timeslot ? "selected" : ""}
+                  onClick={() => handleTimeslotSelection(timeslot)}
+                >
+                  {timeslot.start_time} - {timeslot.end_time}
+                </TimeslotsItem>
+              </div>
+            ))
+          ) : (
+            <p>No timeslots available</p>
+          )}
+        </TimeslotsContainer>
         <CalendarContainer>
           <Calendrier onDateSelect={handleDateSelection} />
         </CalendarContainer>
@@ -172,24 +189,7 @@ const BassinsIndex = () => {
             <li>Aucun bassin disponible</li>
           )}
         </BassinList>
-        <TimeslotsContainer>
-          {piscines &&
-          piscines.length > 0 &&
-          piscines[0]?.timeslots.length > 0 ? (
-            piscines[0].timeslots.map((timeslot, index) => (
-              <div key={index}>
-                <TimeslotsItem
-                  className={selectedTimeslot === timeslot ? "selected" : ""}
-                  onClick={() => handleTimeslotSelection(timeslot)}
-                >
-                  {timeslot.start_time} - {timeslot.end_time}
-                </TimeslotsItem>
-              </div>
-            ))
-          ) : (
-            <p>No timeslots available</p>
-          )}
-        </TimeslotsContainer>
+
         <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
       </InfoContainer>
       {isPopupOpen && (

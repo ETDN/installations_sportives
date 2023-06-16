@@ -1,6 +1,6 @@
 .react-calendar {
   width: 400px;
-  height: 300px;
+  height: 320px;
   max-width: 100%;
   background-color: #fff;
   color: #222;
@@ -20,14 +20,14 @@
   min-width: 50px;
   background-color: transparent;
   border: none;
-  font-size: 16px;
+  font-size: 1.2rem;
   margin-top: 8px;
   margin-bottom: 8px;
 }
 
 .react-calendar__navigation button:enabled:hover,
 .react-calendar__navigation button:enabled:focus {
-  background-color: #f8f8fa;
+  color: #7393b3;
 }
 
 .react-calendar__navigation button[disabled] {
@@ -39,14 +39,15 @@ abbr[title] {
 }
 
 .react-calendar__month-view__days__day--weekend {
-  color: grey;
+  color: #4d6d8d;
 }
 
 .react-calendar__month-view__weekdays {
   display: flex;
+  color: #7393b3;
   justify-content: space-between;
   margin-bottom: 8px;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .react-calendar__month-view__weekdays__weekday {
@@ -61,14 +62,14 @@ abbr[title] {
 .react-calendar__tile {
   margin-top: 8px;
   background-color: transparent;
-  font-size: 1rem;
+  font-size: 1.1rem;
   border: none;
-  width: 2em; /* Set the width and height to the same value */
-  height: 2.2em;
   display: flex;
   justify-content: center;
   align-items: center;
   line-height: 2em; /* Set the line height to match the height */
+  border-radius: 10px; /* Create a perfect circle */
+  overflow: hidden; /* Set the line height to match the height */
 }
 
 .react-calendar__tile:enabled:hover,
@@ -99,7 +100,7 @@ abbr[title] {
 }
 
 .react-calendar__tile--active {
-  background: #ffe900;
+  background: #b39373;
   border-radius: 10px;
   font-weight: bold;
   color: black;
@@ -108,8 +109,8 @@ abbr[title] {
 .react-calendar__tile--active:enabled:hover,
 .react-calendar__tile--active:enabled:focus {
   border-radius: 10px;
-  background: #ffe900;
-  color: black;
+  background: #b39373;
+  color: white;
 }
 
 .react-calendar--selectRange .react-calendar__tile--hover {
@@ -118,18 +119,18 @@ abbr[title] {
 
 .react-calendar__tile--range {
   background: #f8f8fa;
-  color: #ffe900;
+  color: #b39373;
   border-radius: 10px;
 }
 
 .react-calendar__tile--rangeStart {
   border-radius: 10px;
-  background: #ffe900;
-  color: black;
+  background: #b39373;
+  color: white;
 }
 
 .react-calendar__tile--rangeEnd {
   border-radius: 10px;
-  background: #ffe900;
-  color: black;
+  background: #b39373;
+  color: white;
 }

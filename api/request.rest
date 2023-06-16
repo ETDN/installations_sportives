@@ -36,6 +36,11 @@ GET http://localhost:3001/bassins
 GET http://localhost:3001/bassins/2
 
 ###
+
+GET http://localhost:3001/reservations/2023-06-14
+
+###
+
 PUT http://localhost:3001/save-reservation
 Content-Type: application/json
 

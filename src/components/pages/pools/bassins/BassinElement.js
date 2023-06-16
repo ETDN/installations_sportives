@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import css from "styled-components";
 
 export const BassinContainer = styled.div`
   display: flex;
@@ -7,8 +8,7 @@ export const BassinContainer = styled.div`
 
 export const BassinList = styled.ul`
   list-style-type: none;
-  margin-right: 130px;
-  float: right;
+  float: left;
 `;
 
 export const BassinImg = styled.img`
@@ -18,7 +18,7 @@ export const BassinImg = styled.img`
 
 export const ListElement = styled.li`
   position: relative;
-  margin-left: 100px;
+  margin-left: 20px;
   font-size: 1rem;
   font-weight: 500;
   margin-bottom: 10px;
@@ -36,7 +36,6 @@ export const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  border-right: 5px solid #ed0e2e;
   width: 100%;
 
   @media (min-width: 768px) {
@@ -45,6 +44,7 @@ export const ContainerRight = styled.div`
 `;
 
 export const WrapperImg = styled.div`
+  margin-top: 30px;
   float: left;
 `;
 
@@ -96,7 +96,7 @@ export const InfoContainer = styled.div`
   margin-left: 30px;
 
   @media (min-width: 768px) {
-    width: 35%;
+    width: 45%;
   }
 `;
 
@@ -119,12 +119,14 @@ export const CalendarContainer = styled.div`
 `;
 
 export const TimeslotsContainer = styled.div`
-  margin-left: 20px;
+  float: right;
+  margin-top: 50px;
+  margin-right: 100px;
   max-height: 300px;
   overflow-y: auto;
 
   @media (min-width: 768px) {
-    height: 200px;
+    height: 270px;
   }
 `;
 
@@ -145,15 +147,21 @@ export const TimeslotsItem = styled.p`
     background-color: #ed0e2e;
     color: white;
   }
+
+  ${(props) =>
+    props.reserved &&
+    css`
+      background-color: yellow;
+    `}
 `;
 
 export const Button = styled.button`
   display: flex;
-  margin-top: 20px;
+  margin-top: 120px;
   align-items: center;
   margin-left: 20px;
   justify-content: center;
-  background-color: #4caf50;
+  background-color: #ed0e2e;
   color: white;
   width: fit-content;
   height: 50px;
@@ -161,6 +169,10 @@ export const Button = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
+  &:hover {
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  }
 `;
 
 export const PopupContainer = styled.div`
