@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import Modal from "react-modal";
 import moment from "moment";
 import "moment/locale/fr";
+import Swal from "sweetalert2";
 
 import {
   BassinContainer,
@@ -110,6 +111,11 @@ const BassinsIndex = () => {
 
       // Fermer le popup
       setIsPopupOpen(false);
+      Swal.fire(
+        "Sauvegarde réussie",
+        "La réservation a été sauvegardée avec succès.",
+        "success"
+      );
     } catch (error) {
       console.log(error);
       console.log(error.message);
