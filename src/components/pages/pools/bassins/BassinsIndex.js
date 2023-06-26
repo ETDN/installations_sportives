@@ -5,6 +5,7 @@ import Modal from "react-modal";
 import moment from "moment";
 import "moment/locale/fr";
 import Swal from "sweetalert2";
+import { MdOutlineArrowForwardIos } from "react-icons/md";
 
 import {
   BassinContainer,
@@ -152,29 +153,6 @@ const BassinsIndex = () => {
 
   return (
     <BassinContainer>
-      <ContainerRight scrollPosition={scrollPosition}>
-        <WrapperDescription>
-          <WrapperImg>
-            <IconGym
-              src={piscines && piscines.length > 0 ? piscines[0].image : ""}
-            />
-          </WrapperImg>
-          <DescriptionContainer>
-            <p>
-              {piscines && piscines.length > 0
-                ? piscines[0].description
-                : "No description available"}
-            </p>
-          </DescriptionContainer>
-        </WrapperDescription>
-        <h3>Période d'exploitation 2022-2022</h3>
-        <p>Fermeture le dimanche 21 mai 2023</p>
-        <p>Réouverture dès le mercredi 6 septembre 2023</p>
-
-        <h3>Horaires d'ouverture</h3>
-        <p>Lundi: 10h00 - 13h00</p>
-        <p>Mardi à vendredi: 10h00 - 21h00</p>
-      </ContainerRight>
       <InfoContainer>
         <TitlePool>
           <h1>{piscine && piscine.nom_piscine}</h1>
@@ -220,6 +198,46 @@ const BassinsIndex = () => {
 
         <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
       </InfoContainer>
+
+      <ContainerRight scrollPosition={scrollPosition}>
+        <WrapperDescription>
+          <WrapperImg>
+            <IconGym
+              src={piscines && piscines.length > 0 ? piscines[0].image : ""}
+            />
+          </WrapperImg>
+          <DescriptionContainer>
+            <p>
+              {piscines && piscines.length > 0
+                ? piscines[0].description
+                : "No description available"}
+            </p>
+          </DescriptionContainer>
+        </WrapperDescription>
+        <h3>Période d'exploitation 2022-2022</h3>
+        <ul>
+          <li className="listItemWithIcon">
+            <MdOutlineArrowForwardIos className="listIcon" />
+            <p>Fermeture le dimanche 21 mai 2023</p>
+          </li>
+          <li className="listItemWithIcon">
+            <MdOutlineArrowForwardIos className="listIcon" />
+            <p>Réouverture dès le mercredi 6 septembre 2023</p>
+          </li>
+        </ul>
+
+        <h3>Horaires d'ouverture</h3>
+        <ul>
+          <li className="listItemWithIcon">
+            <MdOutlineArrowForwardIos className="listIcon" />
+            <p>Lundi: 10h00 - 13h00</p>
+          </li>
+          <li className="listItemWithIcon">
+            <MdOutlineArrowForwardIos className="listIcon" />
+            <p>Mardi à vendredi: 10h00 - 21h00</p>
+          </li>
+        </ul>
+      </ContainerRight>
       {isPopupOpen && (
         <PopupContainer>
           <h2>Informations du client</h2>

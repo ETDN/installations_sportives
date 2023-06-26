@@ -38,21 +38,17 @@ abbr[title] {
   text-decoration: none;
 }
 
-.react-calendar__month-view__days__day--weekend {
-  color: #4d6d8d;
-}
-
 .react-calendar__month-view__weekdays {
   display: flex;
   color: #7393b3;
   justify-content: space-between;
   margin-bottom: 8px;
-  font-size: 1rem;
 }
 
 .react-calendar__month-view__weekdays__weekday {
   flex-basis: calc(100% / 7);
   text-align: center;
+  font-size: 0.8rem;
 }
 
 .react-calendar__month-view__weekdays__weekday abbr {
@@ -78,8 +74,7 @@ abbr[title] {
   background: #222739;
   color: white;
 }
-
-.react-calendar__tile--now {
+hover .react-calendar__tile--now {
   background: #7393b3;
   border-radius: 10px;
   font-weight: bold;
@@ -91,7 +86,7 @@ abbr[title] {
   background: #7393b3;
   border-radius: 10px;
   font-weight: bold;
-  color: white;
+  color: black;
 }
 
 .react-calendar__tile--hasActive:enabled:hover,

@@ -36,32 +36,23 @@ export const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  border-right: 4px solid
+  border-left: 4px solid
     ${({ scrollPosition }) => (scrollPosition > 0 ? "#ed0e2e" : "#ccc")};
 
   @media (min-width: 768px) {
     width: 30%;
   }
 
-  /* Style de la barre de défilement */
-  &::-webkit-scrollbar {
-    width: 8px;
+  .listItemWithIcon {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
   }
 
-  /* Style de la piste */
-  &::-webkit-scrollbar-track {
-    background-color: #f1f1f1;
-  }
-
-  /* Style de la partie rouge */
-  &::-webkit-scrollbar-thumb {
-    background-color: #ed0e2e;
-    border-radius: 4px;
-  }
-
-  /* Style de la partie rouge lorsqu'on survole */
-  &::-webkit-scrollbar-thumb:hover {
-    background-color: #c70020;
+  .listIcon {
+    color: #ed0e2e;
+    font-size: 1.2rem;
+    margin-right: 10px;
   }
 `;
 
@@ -80,7 +71,7 @@ export const DescriptionContainer = styled.div`
   border: 1px solid lightgray;
   text-align: left;
   font-size: 1rem;
-  max-width: 600px;
+  width: 550px;
   max-height: fit-content;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -132,7 +123,6 @@ export const TitlePool = styled.div`
 `;
 
 export const CalendarContainer = styled.div`
-  background-color: red;
   margin-top: 50px;
   margin-left: 30px;
   margin-bottom: 30px;
@@ -152,7 +142,7 @@ export const CalendarContainer = styled.div`
 export const TimeslotsContainer = styled.div`
   float: right;
   margin-top: 50px;
-  margin-right: 100px;
+  margin-right: 150px;
   max-height: 300px;
   overflow-y: auto;
 
