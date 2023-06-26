@@ -36,10 +36,32 @@ export const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
   padding: 20px;
-  width: 100%;
+  border-right: 4px solid
+    ${({ scrollPosition }) => (scrollPosition > 0 ? "#ed0e2e" : "#ccc")};
 
   @media (min-width: 768px) {
-    width: 45%;
+    width: 30%;
+  }
+
+  /* Style de la barre de défilement */
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  /* Style de la piste */
+  &::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+
+  /* Style de la partie rouge */
+  &::-webkit-scrollbar-thumb {
+    background-color: #ed0e2e;
+    border-radius: 4px;
+  }
+
+  /* Style de la partie rouge lorsqu'on survole */
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #c70020;
   }
 `;
 
@@ -100,10 +122,19 @@ export const InfoContainer = styled.div`
   }
 `;
 
+export const TitlePool = styled.div`
+  margin-top: 20px;
+  margin-left: 30px;
+
+  @media (min-width: 768px) {
+    width: 45%;
+  }
+`;
+
 export const CalendarContainer = styled.div`
   background-color: red;
   margin-top: 50px;
-  margin-left: 20px;
+  margin-left: 30px;
   margin-bottom: 30px;
   width: fit-content;
   height: fit-content;

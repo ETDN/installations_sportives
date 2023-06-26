@@ -20,6 +20,7 @@ import {
   PopupContainer,
   BassinList,
   ListElement,
+  TitlePool,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -35,6 +36,7 @@ const BassinsIndex = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedBassin, setSelectedBassin] = useState(null);
   const [selectedTimeslot, setSelectedTimeslot] = useState(null);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [clientInfo, setClientInfo] = useState({
     nom: "",
     adresse: "",
@@ -48,6 +50,26 @@ const BassinsIndex = () => {
       [name]: value,
     }));
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollableHeight =
+        document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercentage = (window.pageYOffset / scrollableHeight) * 100;
+
+      const scrollbarThumb = document.querySelector(
+        "::-webkit-scrollbar-thumb"
+      );
+      if (scrollbarThumb) {
+        scrollbarThumb.style.height = `${scrollPercentage}%`;
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleTimeslotSelection = (timeslot) => {
     setSelectedTimeslot(timeslot);
@@ -130,13 +152,13 @@ const BassinsIndex = () => {
 
   return (
     <BassinContainer>
-      <ContainerRight>
-        <WrapperImg>
-          <IconGym
-            src={piscines && piscines.length > 0 ? piscines[0].image : ""}
-          />
-        </WrapperImg>
+      <ContainerRight scrollPosition={scrollPosition}>
         <WrapperDescription>
+          <WrapperImg>
+            <IconGym
+              src={piscines && piscines.length > 0 ? piscines[0].image : ""}
+            />
+          </WrapperImg>
           <DescriptionContainer>
             <p>
               {piscines && piscines.length > 0
@@ -154,9 +176,9 @@ const BassinsIndex = () => {
         <p>Mardi à vendredi: 10h00 - 21h00</p>
       </ContainerRight>
       <InfoContainer>
-        <div>
+        <TitlePool>
           <h1>{piscine && piscine.nom_piscine}</h1>
-        </div>
+        </TitlePool>
         <TimeslotsContainer>
           {piscines &&
           piscines.length > 0 &&

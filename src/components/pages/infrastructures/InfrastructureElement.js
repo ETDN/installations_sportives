@@ -69,8 +69,8 @@ export const Card = styled.div`
 `;
 
 export const Icon = styled.img`
-  height: 160px;
-  width: 220px;
+  height: 250px;
+  width: 320px;
   margin-bottom: 20px;
   transition: transform 0.5s ease;
   box-shadow: rgb(237, 14, 46)-10px 10px;
