@@ -20,6 +20,7 @@ const reservationSchema = new mongoose.Schema({
   },
   date: Date,
   bassin_id: Number,
+  piscine_id: Number,
   timeslot: {
     timeslot_id: Number,
     start_time: String,
@@ -29,7 +30,10 @@ const reservationSchema = new mongoose.Schema({
 });
 
 const piscineSchema = new mongoose.Schema({
-  id_piscine: Number,
+  id_piscine: {
+    type: Number,
+    required: true,
+  },
   nom_piscine: String,
   id_infrastructure: Number,
   bassins: [Number],

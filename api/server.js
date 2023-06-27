@@ -74,7 +74,7 @@ app.get("/piscines/:id", async (req, res) => {
 });
 
 app.put("/save-reservation", async (req, res) => {
-  const { bassinId, date, timeslots, client } = req.body;
+  const { piscineId, bassinId, date, timeslots, client } = req.body;
 
   try {
     // Find the piscine that contains the specified bassin
@@ -104,6 +104,7 @@ app.put("/save-reservation", async (req, res) => {
     const reservation = {
       date,
       bassin_id: bassinId,
+      piscine_id: piscineId,
       timeslot: {
         timeslot_id: timeslots.timeslot_id,
         start_time: timeslots.start_time,
@@ -125,8 +126,8 @@ app.put("/save-reservation", async (req, res) => {
   }
 });
 
-app.get("/reservations/:date/:piscineId", async (req, res) => {
-  const { date, piscineId } = req.params;
+app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
+  const { date, piscineId, bassinId } = req.params;
 
   try {
     const reservations = await Piscine.aggregate([
@@ -140,6 +141,7 @@ app.get("/reservations/:date/:piscineId", async (req, res) => {
             $lt: new Date(date + "T23:59:59.999Z"),
           },
           "reservations.piscine_id": parseInt(piscineId),
+          "reservations.bassin_id": parseInt(bassinId),
         },
       },
       {

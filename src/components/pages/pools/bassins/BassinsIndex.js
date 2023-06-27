@@ -41,6 +41,7 @@ const BassinsIndex = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedBassin, setSelectedBassin] = useState(null);
   const [selectedTimeslot, setSelectedTimeslot] = useState(null);
+  const [selectedTimeslots, setSelectedTimeslots] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [reservedTimeslots, setReservedTimeslots] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -78,8 +79,30 @@ const BassinsIndex = () => {
     };
   }, []);
 
+  // const handleTimeslotSelection = (timeslot) => {
+  //   setSelectedTimeslot(timeslot.timeslot_id);
+  //   console.log("Timeslot" + timeslot);
+  // };
+
   const handleTimeslotSelection = (timeslot) => {
-    setSelectedTimeslot(timeslot);
+    // Vérifier si le timeslot est déjà sélectionné
+    const timeslotIndex = selectedTimeslots.findIndex(
+      (selected) => selected.timeslot_id === timeslot.timeslot_id
+    );
+
+    if (timeslotIndex > -1) {
+      // Le timeslot est déjà sélectionné, le supprimer de la liste
+      setSelectedTimeslots((prevSelectedTimeslots) => [
+        ...prevSelectedTimeslots.slice(0, timeslotIndex),
+        ...prevSelectedTimeslots.slice(timeslotIndex + 1),
+      ]);
+    } else {
+      // Le timeslot n'est pas encore sélectionné, l'ajouter à la liste
+      setSelectedTimeslots((prevSelectedTimeslots) => [
+        ...prevSelectedTimeslots,
+        timeslot,
+      ]);
+    }
   };
 
   useEffect(() => {
@@ -121,29 +144,38 @@ const BassinsIndex = () => {
 
   useEffect(() => {
     const fetchReservations = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/reservations/${selectedDate}
-          `
-        );
-        const data = response.data;
-        setReservations(data);
+      console.log(
+        "Ntmmmmmm " +
+          selectedDate +
+          "/" +
+          id_piscine +
+          "/" +
+          selectedBassin.id_bassin
+      );
+      if (selectedDate && selectedBassin) {
+        try {
+          const response = await axios.get(
+            `http://localhost:3001/reservations/${selectedDate}/${id_piscine}/${selectedBassin.id_bassin}`
+          );
+          const data = response.data;
+          setReservations(data);
 
-        // Récupérer les créneaux horaires réservés
-        const reservedTimeslots = data.map(
-          (reservation) => reservation.timeslots
-        );
-        setReservedTimeslots(reservedTimeslots);
+          // Récupérer les créneaux horaires réservés pour le bassin sélectionné
+          const reservedTimeslots = data.map(
+            (reservation) => reservation.timeslotId
+          );
+          setReservedTimeslots(reservedTimeslots);
 
-        // Afficher les créneaux horaires réservés dans la console
-        console.log("Créneaux horaires réservés :", reservedTimeslots);
-      } catch (error) {
-        // Gérer les erreurs
+          // Afficher les créneaux horaires réservés dans la console
+          console.log("Créneaux horaires réservés :", reservedTimeslots);
+        } catch (error) {
+          // Gérer les erreurs
+        }
       }
     };
 
     fetchReservations();
-  }, [selectedDate]);
+  }, [selectedDate, selectedBassin]);
 
   const handleSaveReservation = async () => {
     try {
@@ -151,6 +183,7 @@ const BassinsIndex = () => {
         "http://localhost:3001/save-reservation",
         {
           bassinId: selectedBassin.id_bassin,
+          piscineId: selectedBassin.id_piscine,
           date: selectedDate,
           timeslots: {
             timeslot_id: selectedTimeslot.timeslot_id,
@@ -196,33 +229,30 @@ const BassinsIndex = () => {
           piscines.length > 0 &&
           piscines[0]?.timeslots.length > 0 ? (
             piscines[0].timeslots.map((timeslot, index) => {
-              const isReserved = reservations.some(
-                (reservation) =>
-                  reservation.timeslot_id === timeslot.timeslot_id
+              const isReserved = reservedTimeslots.includes(
+                timeslot.timeslot_id
               );
 
               return (
                 <div key={index}>
                   {isReserved ? (
                     <ReservedTimeslotsItem
-                      className={
-                        selectedTimeslot &&
-                        selectedTimeslot.timeslot_id === timeslot.timeslot_id
-                          ? "selected"
+                      className={`reserved${
+                        selectedTimeslot === timeslot.timeslot_id
+                          ? " selected"
                           : ""
-                      }
+                      }`}
                       onClick={() => handleTimeslotSelection(timeslot)}
                     >
                       {timeslot.start_time} - {timeslot.end_time}
                     </ReservedTimeslotsItem>
                   ) : (
                     <TimeslotsItem
-                      className={
-                        selectedTimeslot &&
-                        selectedTimeslot.timeslot_id === timeslot.timeslot_id
+                      className={`${
+                        selectedTimeslot === timeslot.timeslot_id
                           ? "selected"
                           : ""
-                      }
+                      }`}
                       onClick={() => handleTimeslotSelection(timeslot)}
                     >
                       {timeslot.start_time} - {timeslot.end_time}

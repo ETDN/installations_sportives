@@ -195,8 +195,12 @@ export const TimeslotsItem = styled.p`
   margin-bottom: 10px;
   font-size: 1rem;
 
-  &.reserved {
-    border-color: red;
+  .reserved {
+    border: 1px solid red;
+  }
+
+  .selected.reserved {
+    border: 1px solid red;
   }
   &:hover {
     background-color: #7393b3;
