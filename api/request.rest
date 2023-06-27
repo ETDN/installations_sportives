@@ -37,8 +37,7 @@ GET http://localhost:3001/bassins/2
 
 ###
 
-GET http://localhost:3001/reservations/2023-06-27
-
+GET http://localhost:3001/reservations/2023-06-14/1
 
 ###
 PUT http://localhost:3001/save-reservation

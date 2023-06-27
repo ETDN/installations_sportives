@@ -125,6 +125,79 @@ app.put("/save-reservation", async (req, res) => {
   }
 });
 
+app.get("/reservations/:date/:piscineId", async (req, res) => {
+  const { date, piscineId } = req.params;
+
+  try {
+    const reservations = await Piscine.aggregate([
+      {
+        $unwind: "$reservations",
+      },
+      {
+        $match: {
+          "reservations.date": {
+            $gte: new Date(date),
+            $lt: new Date(date + "T23:59:59.999Z"),
+          },
+          "reservations.piscine_id": parseInt(piscineId),
+        },
+      },
+      {
+        $lookup: {
+          from: "timeslots",
+          localField: "reservations.timeslot.timeslot_id",
+          foreignField: "_id",
+          as: "timeslot",
+        },
+      },
+      {
+        $lookup: {
+          from: "clients",
+          localField: "reservations.client._id",
+          foreignField: "_id",
+          as: "client",
+        },
+      },
+      {
+        $lookup: {
+          from: "piscines",
+          localField: "reservations.piscine_id",
+          foreignField: "_id",
+          as: "piscine",
+        },
+      },
+      {
+        $lookup: {
+          from: "bassins",
+          localField: "reservations.bassin_id",
+          foreignField: "_id",
+          as: "bassin",
+        },
+      },
+      {
+        $project: {
+          _id: "$reservations._id",
+          date: "$reservations.date",
+          piscineId: "$reservations.piscine_id",
+          bassinId: "$reservations.bassin_id",
+          timeslotId: "$reservations.timeslot.timeslot_id",
+          start_time: "$reservations.timeslot.start_time",
+          end_time: "$reservations.timeslot.end_time",
+          client: { $arrayElemAt: ["$client", 0] },
+          bassin: { $arrayElemAt: ["$bassin", 0] },
+          timeslot: { $arrayElemAt: ["$timeslot", 0] },
+          piscine: { $arrayElemAt: ["$piscine", 0] },
+        },
+      },
+    ]);
+
+    res.json(reservations);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 app.get("/reservations/:date", async (req, res) => {
   const { date } = req.params;
 
