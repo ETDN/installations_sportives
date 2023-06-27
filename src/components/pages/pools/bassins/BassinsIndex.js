@@ -22,6 +22,10 @@ import {
   BassinList,
   ListElement,
   TitlePool,
+  CheckboxBassin,
+  Paragraph,
+  TextH3,
+  ReservedTimeslotsItem,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -37,6 +41,8 @@ const BassinsIndex = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedBassin, setSelectedBassin] = useState(null);
   const [selectedTimeslot, setSelectedTimeslot] = useState(null);
+  const [reservations, setReservations] = useState([]);
+  const [reservedTimeslots, setReservedTimeslots] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [clientInfo, setClientInfo] = useState({
     nom: "",
@@ -95,7 +101,9 @@ const BassinsIndex = () => {
   }, [id_piscine]);
 
   const handleDateSelection = (date) => {
-    setSelectedDate(date);
+    const formattedDate = moment(date).format("YYYY-MM-DD");
+    setSelectedDate(formattedDate);
+    console.log("Date fdp :" + formattedDate);
   };
 
   const handleClosePopup = () => {
@@ -110,6 +118,32 @@ const BassinsIndex = () => {
       console.log("Veuillez sélectionner un bassin et un créneau horaire");
     }
   };
+
+  useEffect(() => {
+    const fetchReservations = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/reservations/${selectedDate}
+          `
+        );
+        const data = response.data;
+        setReservations(data);
+
+        // Récupérer les créneaux horaires réservés
+        const reservedTimeslots = data.map(
+          (reservation) => reservation.timeslots
+        );
+        setReservedTimeslots(reservedTimeslots);
+
+        // Afficher les créneaux horaires réservés dans la console
+        console.log("Créneaux horaires réservés :", reservedTimeslots);
+      } catch (error) {
+        // Gérer les erreurs
+      }
+    };
+
+    fetchReservations();
+  }, [selectedDate]);
 
   const handleSaveReservation = async () => {
     try {
@@ -161,16 +195,42 @@ const BassinsIndex = () => {
           {piscines &&
           piscines.length > 0 &&
           piscines[0]?.timeslots.length > 0 ? (
-            piscines[0].timeslots.map((timeslot, index) => (
-              <div key={index}>
-                <TimeslotsItem
-                  className={selectedTimeslot === timeslot ? "selected" : ""}
-                  onClick={() => handleTimeslotSelection(timeslot)}
-                >
-                  {timeslot.start_time} - {timeslot.end_time}
-                </TimeslotsItem>
-              </div>
-            ))
+            piscines[0].timeslots.map((timeslot, index) => {
+              const isReserved = reservations.some(
+                (reservation) =>
+                  reservation.timeslot_id === timeslot.timeslot_id
+              );
+
+              return (
+                <div key={index}>
+                  {isReserved ? (
+                    <ReservedTimeslotsItem
+                      className={
+                        selectedTimeslot &&
+                        selectedTimeslot.timeslot_id === timeslot.timeslot_id
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() => handleTimeslotSelection(timeslot)}
+                    >
+                      {timeslot.start_time} - {timeslot.end_time}
+                    </ReservedTimeslotsItem>
+                  ) : (
+                    <TimeslotsItem
+                      className={
+                        selectedTimeslot &&
+                        selectedTimeslot.timeslot_id === timeslot.timeslot_id
+                          ? "selected"
+                          : ""
+                      }
+                      onClick={() => handleTimeslotSelection(timeslot)}
+                    >
+                      {timeslot.start_time} - {timeslot.end_time}
+                    </TimeslotsItem>
+                  )}
+                </div>
+              );
+            })
           ) : (
             <p>No timeslots available</p>
           )}
@@ -182,7 +242,7 @@ const BassinsIndex = () => {
           {bassins && bassins.length > 0 ? (
             bassins.map((bassin) => (
               <ListElement key={bassin._id}>
-                <input
+                <CheckboxBassin
                   type="radio"
                   name="bassin"
                   checked={selectedBassin === bassin}
@@ -214,27 +274,27 @@ const BassinsIndex = () => {
             </p>
           </DescriptionContainer>
         </WrapperDescription>
-        <h3>Période d'exploitation 2022-2022</h3>
+        <TextH3>Période d'exploitation 2022-2022</TextH3>
         <ul>
           <li className="listItemWithIcon">
             <MdOutlineArrowForwardIos className="listIcon" />
-            <p>Fermeture le dimanche 21 mai 2023</p>
+            <Paragraph>Fermeture le dimanche 21 mai 2023</Paragraph>
           </li>
           <li className="listItemWithIcon">
             <MdOutlineArrowForwardIos className="listIcon" />
-            <p>Réouverture dès le mercredi 6 septembre 2023</p>
+            <Paragraph>Réouverture dès le mercredi 6 septembre 2023</Paragraph>
           </li>
         </ul>
 
-        <h3>Horaires d'ouverture</h3>
+        <TextH3>Horaires d'ouverture</TextH3>
         <ul>
           <li className="listItemWithIcon">
             <MdOutlineArrowForwardIos className="listIcon" />
-            <p>Lundi: 10h00 - 13h00</p>
+            <Paragraph>Lundi: 10h00 - 13h00</Paragraph>
           </li>
           <li className="listItemWithIcon">
             <MdOutlineArrowForwardIos className="listIcon" />
-            <p>Mardi à vendredi: 10h00 - 21h00</p>
+            <Paragraph>Mardi à vendredi: 10h00 - 21h00</Paragraph>
           </li>
         </ul>
       </ContainerRight>

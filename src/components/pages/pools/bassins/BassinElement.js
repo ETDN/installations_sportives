@@ -19,25 +19,52 @@ export const BassinImg = styled.img`
 export const ListElement = styled.li`
   position: relative;
   margin-left: 20px;
-  font-size: 1rem;
+  margin-right: 20px;
+  font-size: 1.1rem;
   font-weight: 500;
   margin-bottom: 10px;
-  cursor: pointer;
-  &:hover {
-    color: red;
-  }
 `;
 
 export const CheckboxBassin = styled.input`
-  margin-left: 5px;
+  margin-right: 10px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid black;
+  border-radius: 50%;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:checked {
+    background-color: #b59f84;
+    border: none;
+  }
 `;
 
 export const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 50px;
   padding: 20px;
-  border-left: 4px solid
-    ${({ scrollPosition }) => (scrollPosition > 0 ? "#ed0e2e" : "#ccc")};
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 3px; /* Largeur de la bordure gauche */
+    height: 100%;
+    background: linear-gradient(
+      to bottom,
+      #ed0e2e 50%,
+      #d3d3d3 50%
+    ); /* Dégradé de couleur */
+  }
 
   @media (min-width: 768px) {
     width: 30%;
@@ -57,7 +84,6 @@ export const ContainerRight = styled.div`
 `;
 
 export const WrapperImg = styled.div`
-  margin-top: 30px;
   float: left;
 `;
 
@@ -79,6 +105,15 @@ export const DescriptionContainer = styled.div`
   padding: 0.5rem;
   margin-bottom: 1rem;
   white-space: pre-wrap;
+`;
+
+export const Paragraph = styled.p`
+  font-size: 1rem;
+`;
+
+export const TextH3 = styled.h3`
+  font-size: 1.1rem;
+  font-weight: bold;
 `;
 
 export const GridContainer = styled.div`
@@ -106,7 +141,8 @@ export const AddressElement = styled.p`
 
 export const InfoContainer = styled.div`
   margin-top: 20px;
-  margin-left: 30px;
+  margin-right: 30px;
+  margin-left: 60px;
 
   @media (min-width: 768px) {
     width: 45%;
@@ -159,13 +195,16 @@ export const TimeslotsItem = styled.p`
   margin-bottom: 10px;
   font-size: 1rem;
 
+  &.reserved {
+    border-color: red;
+  }
   &:hover {
     background-color: #7393b3;
     color: white;
   }
 
   &.selected {
-    background-color: #ed0e2e;
+    background-color: #b59f84;
     color: white;
   }
 
@@ -174,6 +213,10 @@ export const TimeslotsItem = styled.p`
     css`
       background-color: yellow;
     `}
+`;
+
+export const ReservedTimeslotsItem = styled(TimeslotsItem)`
+  border: 2px solid red;
 `;
 
 export const Button = styled.button`
