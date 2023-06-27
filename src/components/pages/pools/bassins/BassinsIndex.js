@@ -41,7 +41,6 @@ const BassinsIndex = () => {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedBassin, setSelectedBassin] = useState(null);
   const [selectedTimeslot, setSelectedTimeslot] = useState(null);
-  const [selectedTimeslots, setSelectedTimeslots] = useState([]);
   const [reservations, setReservations] = useState([]);
   const [reservedTimeslots, setReservedTimeslots] = useState([]);
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -218,26 +217,23 @@ const BassinsIndex = () => {
               const isReserved = reservedTimeslots.includes(
                 timeslot.timeslot_id
               );
+              const isSelected = selectedTimeslot === timeslot;
 
               return (
                 <div key={index}>
                   {isReserved ? (
                     <ReservedTimeslotsItem
-                      className={`${
-                        selectedTimeslot === timeslot.timeslot_id
-                          ? "selected"
-                          : ""
+                      className={`${isSelected ? "selected" : ""} ${
+                        isReserved ? "reserved" : ""
                       }`}
-                      disabled // Ajouter l'attribut disabled pour désactiver la sélection
+                      disabled
                     >
                       {timeslot.start_time} - {timeslot.end_time}
                     </ReservedTimeslotsItem>
                   ) : (
                     <TimeslotsItem
-                      className={`${
-                        selectedTimeslot === timeslot.timeslot_id
-                          ? "selected"
-                          : ""
+                      className={`${isSelected ? "selected" : ""} ${
+                        isReserved ? "reserved" : ""
                       }`}
                       onClick={() => handleTimeslotSelection(timeslot)}
                     >
@@ -251,6 +247,7 @@ const BassinsIndex = () => {
             <p>No timeslots available</p>
           )}
         </TimeslotsContainer>
+
         <CalendarContainer>
           <Calendrier onDateSelect={handleDateSelection} />
         </CalendarContainer>

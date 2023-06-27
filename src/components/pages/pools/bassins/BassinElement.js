@@ -195,13 +195,6 @@ export const TimeslotsItem = styled.p`
   margin-bottom: 10px;
   font-size: 1rem;
 
-  .reserved {
-    border: 1px solid red;
-  }
-
-  .selected.reserved {
-    border: 1px solid red;
-  }
   &:hover {
     background-color: #7393b3;
     color: white;
@@ -211,16 +204,21 @@ export const TimeslotsItem = styled.p`
     background-color: #b59f84;
     color: white;
   }
-
-  ${(props) =>
-    props.reserved &&
-    css`
-      background-color: yellow;
-    `}
 `;
 
 export const ReservedTimeslotsItem = styled(TimeslotsItem)`
-  border: 2px solid red;
+  background-color: red;
+  color: white;
+
+  &:hover {
+    background-color: #7393b3;
+    color: white;
+  }
+
+  &.selected {
+    background-color: #b59f84;
+    color: white;
+  }
 `;
 
 export const Button = styled.button`
