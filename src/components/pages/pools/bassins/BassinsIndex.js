@@ -79,30 +79,9 @@ const BassinsIndex = () => {
     };
   }, []);
 
-  // const handleTimeslotSelection = (timeslot) => {
-  //   setSelectedTimeslot(timeslot.timeslot_id);
-  //   console.log("Timeslot" + timeslot);
-  // };
-
   const handleTimeslotSelection = (timeslot) => {
-    // Vérifier si le timeslot est déjà sélectionné
-    const timeslotIndex = selectedTimeslots.findIndex(
-      (selected) => selected.timeslot_id === timeslot.timeslot_id
-    );
-
-    if (timeslotIndex > -1) {
-      // Le timeslot est déjà sélectionné, le supprimer de la liste
-      setSelectedTimeslots((prevSelectedTimeslots) => [
-        ...prevSelectedTimeslots.slice(0, timeslotIndex),
-        ...prevSelectedTimeslots.slice(timeslotIndex + 1),
-      ]);
-    } else {
-      // Le timeslot n'est pas encore sélectionné, l'ajouter à la liste
-      setSelectedTimeslots((prevSelectedTimeslots) => [
-        ...prevSelectedTimeslots,
-        timeslot,
-      ]);
-    }
+    setSelectedTimeslot(timeslot);
+    console.log("Timeslot", JSON.stringify(timeslot));
   };
 
   useEffect(() => {
@@ -178,6 +157,13 @@ const BassinsIndex = () => {
   }, [selectedDate, selectedBassin]);
 
   const handleSaveReservation = async () => {
+    console.log(
+      selectedBassin.id_bassin +
+        "/" +
+        selectedBassin.id_piscine +
+        "/" +
+        selectedTimeslot.timeslot_id
+    );
     try {
       const response = await axios.put(
         "http://localhost:3001/save-reservation",
@@ -237,12 +223,12 @@ const BassinsIndex = () => {
                 <div key={index}>
                   {isReserved ? (
                     <ReservedTimeslotsItem
-                      className={`reserved${
+                      className={`${
                         selectedTimeslot === timeslot.timeslot_id
-                          ? " selected"
+                          ? "selected"
                           : ""
                       }`}
-                      onClick={() => handleTimeslotSelection(timeslot)}
+                      disabled // Ajouter l'attribut disabled pour désactiver la sélection
                     >
                       {timeslot.start_time} - {timeslot.end_time}
                     </ReservedTimeslotsItem>
