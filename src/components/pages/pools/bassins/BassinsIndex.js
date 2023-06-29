@@ -26,6 +26,7 @@ import {
   Paragraph,
   TextH3,
   ReservedTimeslotsItem,
+  LabelBassin,
 } from "./BassinElement";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import Calendrier from "../../calendrier";
@@ -123,12 +124,7 @@ const BassinsIndex = () => {
   useEffect(() => {
     const fetchReservations = async () => {
       console.log(
-        "Ntmmmmmm " +
-          selectedDate +
-          "/" +
-          id_piscine +
-          "/" +
-          selectedBassin.id_bassin
+        "Ntmmmmmm " + selectedDate + "/" + id_piscine + "/" + selectedBassin
       );
       if (selectedDate && selectedBassin) {
         try {
@@ -218,12 +214,11 @@ const BassinsIndex = () => {
                 timeslot.timeslot_id
               );
               const isSelected = selectedTimeslot === timeslot;
-
               return (
                 <div key={index}>
                   {isReserved ? (
                     <ReservedTimeslotsItem
-                      className={`${isSelected ? "selected" : ""} ${
+                      className={`${isSelected && "selected"} ${
                         isReserved ? "reserved" : ""
                       }`}
                       disabled
@@ -232,7 +227,7 @@ const BassinsIndex = () => {
                     </ReservedTimeslotsItem>
                   ) : (
                     <TimeslotsItem
-                      className={`${isSelected ? "selected" : ""} ${
+                      className={`${isSelected && "selected"} ${
                         isReserved ? "reserved" : ""
                       }`}
                       onClick={() => handleTimeslotSelection(timeslot)}
@@ -247,7 +242,6 @@ const BassinsIndex = () => {
             <p>No timeslots available</p>
           )}
         </TimeslotsContainer>
-
         <CalendarContainer>
           <Calendrier onDateSelect={handleDateSelection} />
         </CalendarContainer>
@@ -256,19 +250,27 @@ const BassinsIndex = () => {
             bassins.map((bassin) => (
               <ListElement key={bassin._id}>
                 <CheckboxBassin
-                  type="radio"
-                  name="bassin"
-                  checked={selectedBassin === bassin}
-                  onChange={() => handleBassinSelection(bassin)}
-                />
-                {bassin.nom_bassin}
+                  selected={
+                    selectedBassin &&
+                    selectedBassin.id_bassin === bassin.id_bassin
+                  }
+                  onClick={() => handleBassinSelection(bassin)}
+                >
+                  <LabelBassin
+                    selected={
+                      selectedBassin &&
+                      selectedBassin.id_bassin === bassin.id_bassin
+                    }
+                  >
+                    {bassin.nom_bassin}
+                  </LabelBassin>
+                </CheckboxBassin>
               </ListElement>
             ))
           ) : (
             <li>Aucun bassin disponible</li>
           )}
         </BassinList>
-
         <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
       </InfoContainer>
 

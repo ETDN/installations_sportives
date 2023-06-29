@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import css from "styled-components";
 
 export const BassinContainer = styled.div`
   display: flex;
@@ -25,23 +24,27 @@ export const ListElement = styled.li`
   margin-bottom: 10px;
 `;
 
-export const CheckboxBassin = styled.input`
+export const CheckboxBassin = styled.button`
   margin-right: 10px;
   appearance: none;
+  border: 1px solid black;
   -webkit-appearance: none;
   -moz-appearance: none;
-  width: 20px;
-  height: 20px;
-  border: 2px solid black;
-  border-radius: 50%;
-
+  width: 130px;
+  height: 50px;
   &:hover {
     cursor: pointer;
   }
 
-  &:checked {
-    background-color: #b59f84;
-    border: none;
+  background-color: ${(props) => (props.selected ? "#b39373" : "#C0C0C0")};
+`;
+
+export const LabelBassin = styled.label`
+  font-size: 0.7rem;
+  color: ${(props) => (props.selected ? "#fff" : "#000000")};
+  &:hover {
+    cursor: pointer;
+    color: white;
   }
 `;
 
@@ -223,11 +226,11 @@ export const ReservedTimeslotsItem = styled(TimeslotsItem)`
 
 export const Button = styled.button`
   display: flex;
-  margin-top: 120px;
+  margin-top: 60px;
   align-items: center;
   margin-left: 20px;
   justify-content: center;
-  background-color: #ed0e2e;
+  background-color: #7393b3;
   color: white;
   width: fit-content;
   height: 50px;
