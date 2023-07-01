@@ -45,8 +45,6 @@ const BassinsIndex = () => {
   const [reservations, setReservations] = useState([]);
   const [selectedDates, setSelectedDates] = useState([]);
   const [reservedTimeslots, setReservedTimeslots] = useState([]);
-  const [selectedPiscineId, setSelectedPiscineId] = useState(null);
-  const [selectedClient, setSelectedClient] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [clientInfo, setClientInfo] = useState({
     nom: "",
@@ -62,25 +60,10 @@ const BassinsIndex = () => {
     }));
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollableHeight =
-        document.documentElement.scrollHeight - window.innerHeight;
-      const scrollPercentage = (window.pageYOffset / scrollableHeight) * 100;
-
-      const scrollbarThumb = document.querySelector(
-        "::-webkit-scrollbar-thumb"
-      );
-      if (scrollbarThumb) {
-        scrollbarThumb.style.height = `${scrollPercentage}%`;
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  const handleBassinSelection = (bassin) => {
+    setSelectedBassin(bassin);
+    console.log(bassin.id_bassin);
+  };
 
   const handleTimeslotSelection = (timeslot) => {
     setSelectedTimeslot(timeslot);
@@ -121,7 +104,7 @@ const BassinsIndex = () => {
 
       const reservations = selectedDates.map((date) => ({
         bassinId: selectedBassin.id_bassin,
-        piscineId: selectedBassin.id_piscine,
+        piscineId: id_piscine,
         date: date,
         timeslots: {
           timeslot_id: selectedTimeslot.timeslot_id,
@@ -143,14 +126,6 @@ const BassinsIndex = () => {
 
   useEffect(() => {
     const fetchReservations = async () => {
-      console.log(
-        "Ntmmmmmm " +
-          JSON.stringify(selectedDates) +
-          "/" +
-          id_piscine +
-          "/" +
-          selectedBassin.id_bassin
-      );
       if (selectedDate && selectedBassin) {
         try {
           let dates = [];
@@ -198,11 +173,6 @@ const BassinsIndex = () => {
     fetchReservations();
   }, [selectedDate, selectedBassin]);
 
-  const handleBassinSelection = (bassin) => {
-    setSelectedBassin(bassin);
-    console.log(bassin.id_bassin);
-  };
-
   const handleSaveReservation = async () => {
     if (selectedBassin && selectedTimeslot) {
       setIsPopupOpen(true);
@@ -213,31 +183,33 @@ const BassinsIndex = () => {
       }
 
       try {
-        const reservations = [];
-
-        // Créer une réservation pour chaque date sélectionnée
-        selectedDates.forEach((date) => {
-          const reservation = {
-            bassinId: selectedBassin.id_bassin,
-            piscineId: selectedBassin.id_piscine,
-            date: moment(date).format("YYYY-MM-DD"),
-            timeslots: {
-              timeslot_id: selectedTimeslot.timeslot_id,
-              start_time: selectedTimeslot.start_time,
-              end_time: selectedTimeslot.end_time,
-            },
-            client: clientInfo,
-          };
-          reservations.push(reservation);
-        });
+        const reservations = selectedDates.map((date) => ({
+          bassinId: selectedBassin.id_bassin,
+          piscineId: id_piscine,
+          dates: [moment(date).format("YYYY-MM-DD")],
+          timeslots: {
+            timeslot_id: selectedTimeslot.timeslot_id,
+            start_time: selectedTimeslot.start_time,
+            end_time: selectedTimeslot.end_time,
+          },
+          client: clientInfo,
+        }));
 
         const requestBody = {
-          reservations: reservations, // Envelopper les réservations dans un objet "reservations"
+          piscineId: id_piscine,
+          bassinId: selectedBassin.id_bassin,
+          dates: selectedDates.map((date) => moment(date).format("YYYY-MM-DD")),
+          timeslots: {
+            timeslot_id: selectedTimeslot.timeslot_id,
+            start_time: selectedTimeslot.start_time,
+            end_time: selectedTimeslot.end_time,
+          },
+          client: clientInfo,
         };
 
         const response = await axios.put(
           "http://localhost:3001/save-reservation",
-          requestBody, // Utiliser l'objet requestBody contenant les réservations
+          requestBody,
           {
             headers: {
               "Content-Type": "application/json",
@@ -245,7 +217,6 @@ const BassinsIndex = () => {
           }
         );
 
-        // Fermer le popup
         setIsPopupOpen(false);
         Swal.fire(
           "Sauvegarde réussie",
