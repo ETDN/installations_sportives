@@ -78,6 +78,8 @@ app.get("/piscines/:id", async (req, res) => {
 app.put("/save-reservation", async (req, res) => {
   const { piscineId, bassinId, dates, timeslots, client } = req.body;
 
+  console.log("piscineId:", piscineId);
+
   try {
     const piscine = await Piscine.findOne({ id_piscine: piscineId });
 

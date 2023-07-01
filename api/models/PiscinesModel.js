@@ -42,7 +42,5 @@ const piscineSchema = new mongoose.Schema({
 });
 
 const Piscine = mongoose.model("Piscine", piscineSchema, "piscines");
-const Client = mongoose.model("Client", clientSchema, "clients");
 
 module.exports = Piscine;
-module.exports = Client;
