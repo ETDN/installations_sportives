@@ -7,7 +7,6 @@ import {
   H1,
   Icon,
   H2,
-  InfrastructureIcon,
   Wrapper,
 } from "./InfrastructureElement";
 import { Link } from "react-router-dom";
@@ -33,9 +32,7 @@ const InfrastructuresIndex = () => {
           centresResponse,
           terrainsResponse,
           piscinesResponse,
-          infrastructureResponse,
           patinoireResponse,
-          bassinResponse,
           gymResponse,
           salleResponse,
         ] = await Promise.all([

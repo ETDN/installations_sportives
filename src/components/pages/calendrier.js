@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import Calendar from "react-calendar";
-import "../../css/calendrier.css";
+import "react-modern-calendar-datepicker/lib/DatePicker.css";
+import { Calendar } from "react-modern-calendar-datepicker";
 
-function Calendrier({ onDateSelect }) {
-  const [date, setDate] = useState(new Date());
+const App = ({ handleDateSelection }) => {
+  const [selectedDays, setSelectedDays] = useState([]);
 
-  const handleDateChange = (selectedDate) => {
-    setDate(selectedDate);
-    onDateSelect(selectedDate.toDateString()); // Formater la date en tant que chaîne de caractères
+  const handleCalendarSelection = (date) => {
+    setSelectedDays(date);
+    handleDateSelection(date);
   };
 
   return (
-    <div className="react-calendar">
-      <div className="calendar-container">
-        <Calendar onChange={handleDateChange} value={date} />
-      </div>
-    </div>
+    <Calendar
+      value={selectedDays}
+      onChange={handleCalendarSelection}
+      shouldHighlightWeekends
+    />
   );
-}
+};
 
-export default Calendrier;
+export default App;

@@ -18,9 +18,9 @@ const reservationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     default: () => new mongoose.Types.ObjectId(),
   },
-  date: Date,
-  bassin_id: Number,
-  piscine_id: Number,
+  dates: [Date], // Utilisation d'un tableau pour stocker plusieurs dates
+  id_bassin: Number, // Utilisation de la même casse que dans la route
+  id_piscine: Number, // Utilisation de la même casse que dans la route
   timeslot: {
     timeslot_id: Number,
     start_time: String,
@@ -42,5 +42,7 @@ const piscineSchema = new mongoose.Schema({
 });
 
 const Piscine = mongoose.model("Piscine", piscineSchema, "piscines");
+const Client = mongoose.model("Client", clientSchema, "clients");
 
 module.exports = Piscine;
+module.exports = Client;

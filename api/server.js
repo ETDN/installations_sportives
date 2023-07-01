@@ -20,12 +20,14 @@ mongoose
 const Infrastructure = require("./models/InfrastructuresModel");
 const Piscine = require("./models/PiscinesModel");
 const CentreSportif = require("./models/CentresSportifsModel");
+const Reservation = require("./models/ReservationModel");
 const Patinoire = require("./models/PatinoiresModel");
 const Bassin = require("./models/BassinsModel");
 const Gym = require("./models/GymsModel");
 const Salle = require("./models/SallesModel");
 const Terrain = require("./models/TerrainsModel");
 //if we make a request to localhost 3001/todos it's gonna to find our todos and find our model
+
 app.get("/infrastructures", async (req, res) => {
   const infrastructures = await Infrastructure.find();
 
@@ -74,24 +76,21 @@ app.get("/piscines/:id", async (req, res) => {
 });
 
 app.put("/save-reservation", async (req, res) => {
-  const { piscineId, bassinId, date, timeslots, client } = req.body;
+  const { piscineId, bassinId, dates, timeslots, client } = req.body;
 
   try {
-    // Find the piscine that contains the specified bassin
-    const piscine = await Piscine.findOne({ bassins: bassinId });
+    const piscine = await Piscine.findOne({ id_piscine: piscineId });
 
     if (!piscine) {
       return res.status(404).json({ error: "Piscine not found" });
     }
 
-    // Find the specified bassin within the piscine
     const bassin = piscine.bassins.find((b) => b === bassinId);
 
     if (!bassin) {
       return res.status(404).json({ error: "Bassin not found" });
     }
 
-    // Find the matching timeslot within the piscine
     const timeslot = piscine.timeslots.find(
       (slot) => slot.timeslot_id === timeslots.timeslot_id
     );
@@ -100,24 +99,19 @@ app.put("/save-reservation", async (req, res) => {
       return res.status(404).json({ error: "Timeslot not found" });
     }
 
-    // Create a new reservation object with generated _id
-    const reservation = {
-      date,
-      bassin_id: bassinId,
-      piscine_id: piscineId,
+    const reservations = dates.map((date) => ({
+      dates: [new Date(date)],
+      id_bassin: bassinId,
+      id_piscine: piscineId,
       timeslot: {
         timeslot_id: timeslots.timeslot_id,
         start_time: timeslots.start_time,
         end_time: timeslots.end_time,
       },
-      client,
-    };
+      client: client,
+    }));
 
-    // Add the reservation to the reservations array
-    piscine.reservations.push(reservation);
-
-    // Save the updated document
-    await piscine.save();
+    await Reservation.insertMany(reservations);
 
     res.sendStatus(200);
   } catch (error) {
