@@ -115,6 +115,9 @@ app.put("/save-reservation", async (req, res) => {
 
     await Reservation.insertMany(reservations);
 
+    piscine.reservations.push(...reservations);
+    await piscine.save();
+
     res.sendStatus(200);
   } catch (error) {
     console.error(error);
