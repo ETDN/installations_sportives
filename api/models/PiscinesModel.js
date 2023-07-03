@@ -18,7 +18,7 @@ const reservationSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     default: () => new mongoose.Types.ObjectId(),
   },
-  dates: [Date], // Utilisation d'un tableau pour stocker plusieurs dates
+  date: Date, // Utilisation d'un tableau pour stocker plusieurs dates
   id_bassin: Number, // Utilisation de la même casse que dans la route
   id_piscine: Number, // Utilisation de la même casse que dans la route
   timeslot: {

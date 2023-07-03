@@ -101,21 +101,24 @@ app.put("/save-reservation", async (req, res) => {
       return res.status(404).json({ error: "Timeslot not found" });
     }
 
-    const reservations = dates.map((date) => ({
-      dates: [new Date(date)],
-      id_bassin: bassinId,
-      id_piscine: piscineId,
-      timeslot: {
-        timeslot_id: timeslots.timeslot_id,
-        start_time: timeslots.start_time,
-        end_time: timeslots.end_time,
-      },
-      client: client,
-    }));
+    for (const date of dates) {
+      const reservation = {
+        date: new Date(date),
+        id_bassin: bassinId,
+        id_piscine: piscineId,
+        timeslot: {
+          timeslot_id: timeslots.timeslot_id,
+          start_time: timeslots.start_time,
+          end_time: timeslots.end_time,
+        },
+        client: client,
+      };
 
-    await Reservation.insertMany(reservations);
+      await Reservation.create(reservation);
 
-    piscine.reservations.push(...reservations);
+      piscine.reservations.push(reservation);
+    }
+
     await piscine.save();
 
     res.sendStatus(200);
