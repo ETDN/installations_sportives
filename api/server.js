@@ -142,8 +142,8 @@ app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
             $gte: new Date(date),
             $lt: new Date(date + "T23:59:59.999Z"),
           },
-          "reservations.piscine_id": parseInt(piscineId),
-          "reservations.bassin_id": parseInt(bassinId),
+          "reservations.id_piscine": parseInt(piscineId),
+          "reservations.id_bassin": parseInt(bassinId),
         },
       },
       {
@@ -165,7 +165,7 @@ app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
       {
         $lookup: {
           from: "piscines",
-          localField: "reservations.piscine_id",
+          localField: "reservations.id_piscine",
           foreignField: "_id",
           as: "piscine",
         },
@@ -173,7 +173,7 @@ app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
       {
         $lookup: {
           from: "bassins",
-          localField: "reservations.bassin_id",
+          localField: "reservations.id_bassin",
           foreignField: "_id",
           as: "bassin",
         },
@@ -182,8 +182,8 @@ app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
         $project: {
           _id: "$reservations._id",
           date: "$reservations.date",
-          piscineId: "$reservations.piscine_id",
-          bassinId: "$reservations.bassin_id",
+          piscineId: "$reservations.id_piscine",
+          bassinId: "$reservations.id_bassin",
           timeslotId: "$reservations.timeslot.timeslot_id",
           start_time: "$reservations.timeslot.start_time",
           end_time: "$reservations.timeslot.end_time",
@@ -221,7 +221,7 @@ app.get("/reservations/:date", async (req, res) => {
       {
         $lookup: {
           from: "bassins",
-          localField: "reservations.bassin_id",
+          localField: "id_bassin",
           foreignField: "_id",
           as: "bassin",
         },
@@ -229,7 +229,7 @@ app.get("/reservations/:date", async (req, res) => {
       {
         $lookup: {
           from: "timeslots",
-          localField: "reservations.timeslot.timeslot_id",
+          localField: "timeslot.timeslot_id",
           foreignField: "_id",
           as: "timeslot",
         },
@@ -246,7 +246,8 @@ app.get("/reservations/:date", async (req, res) => {
         $project: {
           _id: "$reservations._id",
           date: "$reservations.date",
-          bassin_id: "$reservations.bassin_id",
+          id_bassin: "$reservations.id_bassin",
+          id_piscine: "$reservations.id_piscine",
           timeslot_id: "$reservations.timeslot.timeslot_id",
           start_time: "$reservations.timeslot.start_time",
           end_time: "$reservations.timeslot.end_time",
@@ -256,6 +257,8 @@ app.get("/reservations/:date", async (req, res) => {
         },
       },
     ]);
+
+    console.log("Reservations:", reservations);
 
     res.json(reservations);
   } catch (error) {
