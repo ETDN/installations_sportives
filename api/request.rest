@@ -37,7 +37,7 @@ GET http://localhost:3001/bassins/2
 
 ###
 
-GET http://localhost:3001/reservations/2023-07-1/1/1
+GET http://localhost:3001/reservations/1/1/2023-08-12
 
 ###
 
@@ -47,14 +47,14 @@ Content-Type: application/json
 {
   "piscineId": 1,
   "bassinId": 1,
-  "dates": ["2023-07-01", "2023-07-02", "2023-07-03"],
+  "dates": ["2023-08-12", "2023-08-13"],
   "timeslots": {
     "timeslot_id": 2,
     "start_time": "8:30",
     "end_time": "9:00"
   },
   "client": {
-    "nom": "Lala",
+    "nom": "Emilie",
     "adresse": "789 Main Street",
     "telephone": "555-1234"
   }

@@ -91,7 +91,7 @@ const BassinsIndex = () => {
   const handleDateSelection = (date) => {
     const selectedDates = Array.isArray(date) ? date : [date];
     setSelectedDates(selectedDates);
-    console.log("Dates :", selectedDates);
+    console.log("Datessss :", selectedDates);
   };
 
   const handleClosePopup = () => {
@@ -105,7 +105,7 @@ const BassinsIndex = () => {
       const reservations = selectedDates.map((date) => ({
         bassinId: selectedBassin.id_bassin,
         piscineId: id_piscine,
-        date: date,
+        date: selectedDates,
         timeslots: {
           timeslot_id: selectedTimeslot.timeslot_id,
           start_time: selectedTimeslot.start_time,

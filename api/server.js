@@ -128,77 +128,52 @@ app.put("/save-reservation", async (req, res) => {
   }
 });
 
-app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
-  const { date, piscineId, bassinId } = req.params;
+app.get("/reservations/:piscineId/:bassinId/:date", async (req, res) => {
+  const { piscineId, bassinId, date } = req.params;
 
   try {
-    const reservations = await Piscine.aggregate([
-      {
-        $unwind: "$reservations",
-      },
-      {
-        $match: {
-          "reservations.date": {
-            $gte: new Date(date),
-            $lt: new Date(date + "T23:59:59.999Z"),
-          },
-          "reservations.id_piscine": parseInt(piscineId),
-          "reservations.id_bassin": parseInt(bassinId),
-        },
-      },
-      {
-        $lookup: {
-          from: "timeslots",
-          localField: "reservations.timeslot.timeslot_id",
-          foreignField: "_id",
-          as: "timeslot",
-        },
-      },
-      {
-        $lookup: {
-          from: "clients",
-          localField: "reservations.client._id",
-          foreignField: "_id",
-          as: "client",
-        },
-      },
-      {
-        $lookup: {
-          from: "piscines",
-          localField: "reservations.id_piscine",
-          foreignField: "_id",
-          as: "piscine",
-        },
-      },
-      {
-        $lookup: {
-          from: "bassins",
-          localField: "reservations.id_bassin",
-          foreignField: "_id",
-          as: "bassin",
-        },
-      },
-      {
-        $project: {
-          _id: "$reservations._id",
-          date: "$reservations.date",
-          piscineId: "$reservations.id_piscine",
-          bassinId: "$reservations.id_bassin",
-          timeslotId: "$reservations.timeslot.timeslot_id",
-          start_time: "$reservations.timeslot.start_time",
-          end_time: "$reservations.timeslot.end_time",
-          client: { $arrayElemAt: ["$client", 0] },
-          bassin: { $arrayElemAt: ["$bassin", 0] },
-          timeslot: { $arrayElemAt: ["$timeslot", 0] },
-          piscine: { $arrayElemAt: ["$piscine", 0] },
-        },
-      },
-    ]);
+    const piscine = await Piscine.findOne({ id_piscine: piscineId });
 
-    res.json(reservations);
+    if (!piscine) {
+      console.log("Piscine not found");
+      return res.status(404).json({ error: "Piscine not found" });
+    }
+
+    const bassin = piscine.bassins.includes(bassinId);
+
+    if (!bassin) {
+      console.log("Bassin not found");
+      return res.status(404).json({ error: "Bassin not found" });
+    }
+
+    const bassinIdNumber = parseInt(bassinId); // Convertir bassinId en nombre
+
+    let databaseReservations = [];
+
+    if (Array.isArray(date)) {
+      // Si date est un tableau de dates
+      const formattedDates = date.map((d) => new Date(d));
+      databaseReservations = piscine.reservations.filter(
+        (reservation) =>
+          reservation.id_bassin === bassinIdNumber &&
+          formattedDates.some(
+            (d) => d.toDateString() === reservation.date.toDateString()
+          )
+      );
+    } else {
+      // Si date est une seule date
+      const formattedDate = new Date(date);
+      databaseReservations = piscine.reservations.filter(
+        (reservation) =>
+          reservation.id_bassin === bassinIdNumber &&
+          reservation.date.toDateString() === formattedDate.toDateString()
+      );
+    }
+
+    res.json(databaseReservations);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 
