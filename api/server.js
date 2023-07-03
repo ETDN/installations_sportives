@@ -102,8 +102,11 @@ app.put("/save-reservation", async (req, res) => {
     }
 
     for (const date of dates) {
+      const selectedDate = new Date(date);
+      selectedDate.setMonth(selectedDate.getMonth() + -1);
+
       const reservation = {
-        date: new Date(date),
+        date: selectedDate,
         id_bassin: bassinId,
         id_piscine: piscineId,
         timeslot: {

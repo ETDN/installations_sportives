@@ -37,7 +37,7 @@ GET http://localhost:3001/bassins/2
 
 ###
 
-GET http://localhost:3001/reservations/1/1/2023-08-12
+GET http://localhost:3001/reservations/1/1/2023-08-06
 
 ###
 
@@ -47,7 +47,7 @@ Content-Type: application/json
 {
   "piscineId": 1,
   "bassinId": 1,
-  "dates": ["2023-08-12", "2023-08-13"],
+  "dates": ["2023-08-23", "2023-08-03"],
   "timeslots": {
     "timeslot_id": 2,
     "start_time": "8:30",
