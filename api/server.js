@@ -202,70 +202,70 @@ app.get("/reservations/:date/:piscineId/:bassinId", async (req, res) => {
   }
 });
 
-app.get("/reservations/:date", async (req, res) => {
-  const { date } = req.params;
+// app.get("/reservations/:date", async (req, res) => {
+//   const { date } = req.params;
 
-  try {
-    const reservations = await Piscine.aggregate([
-      {
-        $unwind: "$reservations",
-      },
-      {
-        $match: {
-          "reservations.date": {
-            $gte: new Date(date),
-            $lt: new Date(date + "T23:59:59.999Z"),
-          },
-        },
-      },
-      {
-        $lookup: {
-          from: "bassins",
-          localField: "id_bassin",
-          foreignField: "_id",
-          as: "bassin",
-        },
-      },
-      {
-        $lookup: {
-          from: "timeslots",
-          localField: "timeslot.timeslot_id",
-          foreignField: "_id",
-          as: "timeslot",
-        },
-      },
-      {
-        $lookup: {
-          from: "clients",
-          localField: "reservations.client",
-          foreignField: "_id",
-          as: "client",
-        },
-      },
-      {
-        $project: {
-          _id: "$reservations._id",
-          date: "$reservations.date",
-          id_bassin: "$reservations.id_bassin",
-          id_piscine: "$reservations.id_piscine",
-          timeslot_id: "$reservations.timeslot.timeslot_id",
-          start_time: "$reservations.timeslot.start_time",
-          end_time: "$reservations.timeslot.end_time",
-          client: { $arrayElemAt: ["$client", 0] },
-          bassin: { $arrayElemAt: ["$bassin", 0] },
-          timeslot: { $arrayElemAt: ["$timeslot", 0] },
-        },
-      },
-    ]);
+//   try {
+//     const reservations = await Piscine.aggregate([
+//       {
+//         $unwind: "$reservations",
+//       },
+//       {
+//         $match: {
+//           "reservations.date": {
+//             $gte: new Date(date),
+//             $lt: new Date(date + "T23:59:59.999Z"),
+//           },
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "bassins",
+//           localField: "id_bassin",
+//           foreignField: "_id",
+//           as: "bassin",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "timeslots",
+//           localField: "timeslot.timeslot_id",
+//           foreignField: "_id",
+//           as: "timeslot",
+//         },
+//       },
+//       {
+//         $lookup: {
+//           from: "clients",
+//           localField: "reservations.client",
+//           foreignField: "_id",
+//           as: "client",
+//         },
+//       },
+//       {
+//         $project: {
+//           _id: "$reservations._id",
+//           date: "$reservations.date",
+//           id_bassin: "$reservations.id_bassin",
+//           id_piscine: "$reservations.id_piscine",
+//           timeslot_id: "$reservations.timeslot.timeslot_id",
+//           start_time: "$reservations.timeslot.start_time",
+//           end_time: "$reservations.timeslot.end_time",
+//           client: { $arrayElemAt: ["$client", 0] },
+//           bassin: { $arrayElemAt: ["$bassin", 0] },
+//           timeslot: { $arrayElemAt: ["$timeslot", 0] },
+//         },
+//       },
+//     ]);
 
-    console.log("Reservations:", reservations);
+//     console.log("Reservations:", reservations);
 
-    res.json(reservations);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
+//     res.json(reservations);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// });
 
 app.get("/bassins/:id", async (req, res) => {
   const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
