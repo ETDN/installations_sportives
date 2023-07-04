@@ -126,52 +126,58 @@ const BassinsIndex = () => {
 
   useEffect(() => {
     const fetchReservations = async () => {
-      if (selectedDate && selectedBassin) {
-        try {
-          let dates = [];
-          if (Array.isArray(selectedDate)) {
-            // Si selectedDate est un tableau de dates
-            dates = selectedDate.map((date) =>
-              moment(date).format("YYYY-MM-DD")
-            );
-          } else {
-            // Si selectedDate est une seule date
-            dates.push(moment(selectedDate).format("YYYY-MM-DD"));
-          }
+      if (selectedDates.length === 0 || !selectedBassin) {
+        return;
+      }
 
-          const requests = dates.map((date) =>
+      const formattedDates = selectedDates.map((date) =>
+        moment(date).subtract(1, "month").format("YYYY-MM-DD")
+      );
+
+      console.log("Formatted dates: " + formattedDates);
+
+      try {
+        const responses = await Promise.all(
+          formattedDates.map((date) =>
             axios.get(
-              `http://localhost:3001/reservations/${date}/${id_piscine}/${selectedBassin.id_bassin}`
+              `http://localhost:3001/reservations/${id_piscine}/${selectedBassin.id_bassin}/${date}`
             )
+          )
+        );
+
+        console.log(
+          "Reponses : " +
+            id_piscine +
+            "/" +
+            selectedBassin.id_bassin +
+            "/" +
+            formattedDates
+        );
+
+        const reservedTimeslots = responses.reduce((accumulator, response) => {
+          const reservations = response.data;
+          const timeslots = reservations.map(
+            (reservation) => reservation.timeslot
           );
+          const timeslotIds = timeslots.map((timeslot) => timeslot.timeslot_id);
+          const timeslotInfo = timeslots.map((timeslot) => ({
+            timeslotId: timeslot.timeslot_id,
+            startTime: timeslot.start_time,
+            endTime: timeslot.end_time,
+          }));
+          console.log("Timeslot Info: ", timeslotInfo);
+          return accumulator.concat(timeslotIds);
+        }, []);
 
-          const responses = await Promise.all(requests);
-          const data = responses.map((response) => response.data);
-
-          // Concaténer les réservations pour toutes les dates
-          const mergedReservations = data.reduce(
-            (accumulator, reservations) => [...accumulator, ...reservations],
-            []
-          );
-
-          setReservations(mergedReservations);
-
-          // Récupérer les créneaux horaires réservés pour le bassin sélectionné
-          const reservedTimeslots = mergedReservations.map(
-            (reservation) => reservation.timeslotId
-          );
-          setReservedTimeslots(reservedTimeslots);
-
-          // Afficher les créneaux horaires réservés dans la console
-          console.log("Créneaux horaires réservés :", reservedTimeslots);
-        } catch (error) {
-          // Gérer les erreurs
-        }
+        setReservedTimeslots(reservedTimeslots);
+      } catch (error) {
+        console.log(error);
+        // Handle error
       }
     };
 
     fetchReservations();
-  }, [selectedDate, selectedBassin]);
+  }, [selectedDates, selectedBassin]);
 
   const handleSaveReservation = async () => {
     if (selectedBassin && selectedTimeslot) {
