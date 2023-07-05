@@ -210,16 +210,11 @@ export const TimeslotsItem = styled.p`
 `;
 
 export const ReservedTimeslotsItem = styled(TimeslotsItem)`
-  background-color: red;
+  background-color: #ed0e2e;
   color: white;
 
   &:hover {
-    background-color: #7393b3;
-    color: white;
-  }
-
-  &.selected {
-    background-color: #b59f84;
+    background-color: #ed0e2e;
     color: white;
   }
 `;

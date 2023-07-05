@@ -315,7 +315,7 @@ const BassinsIndex = () => {
         <Button onClick={handleSaveReservation}>Réserver</Button>
       </InfoContainer>
 
-      <ContainerRight scrollPosition={scrollPosition}>
+      <ContainerRight>
         <WrapperDescription>
           <WrapperImg>
             <IconGym
