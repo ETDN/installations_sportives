@@ -13,20 +13,21 @@ const clientSchema = new mongoose.Schema({
   telephone: String,
 });
 
+const bassinSchema = new mongoose.Schema({
+  id_bassin: Number,
+  nom_bassin: String,
+});
+
 const reservationSchema = new mongoose.Schema({
   _id: {
     type: mongoose.Schema.Types.ObjectId,
     default: () => new mongoose.Types.ObjectId(),
   },
-  date: Date, // Utilisation d'un tableau pour stocker plusieurs dates
-  id_bassin: Number, // Utilisation de la même casse que dans la route
-  id_piscine: Number, // Utilisation de la même casse que dans la route
-  timeslot: {
-    timeslot_id: Number,
-    start_time: String,
-    end_time: String,
-  },
-  client: [clientSchema],
+  date: Date,
+  id_bassin: Number,
+  id_piscine: Number,
+  timeslot: timeslotSchema,
+  client: [clientSchema], // Supprimer les crochets
 });
 
 const piscineSchema = new mongoose.Schema({
@@ -36,7 +37,7 @@ const piscineSchema = new mongoose.Schema({
   },
   nom_piscine: String,
   id_infrastructure: Number,
-  bassins: [Number],
+  bassins: [bassinSchema],
   timeslots: [timeslotSchema],
   reservations: [reservationSchema], // Utilisation du sous-modèle timeslotSchema
 });

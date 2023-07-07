@@ -20,12 +20,8 @@ mongoose
 const Infrastructure = require("./models/InfrastructuresModel");
 const Piscine = require("./models/PiscinesModel");
 const CentreSportif = require("./models/CentresSportifsModel");
-const Reservation = require("./models/ReservationModel");
 const Patinoire = require("./models/PatinoiresModel");
-const Bassin = require("./models/BassinsModel");
 const Gym = require("./models/GymsModel");
-const Salle = require("./models/SallesModel");
-const Terrain = require("./models/TerrainsModel");
 //if we make a request to localhost 3001/todos it's gonna to find our todos and find our model
 
 app.get("/infrastructures", async (req, res) => {
@@ -42,43 +38,8 @@ app.get("/piscines", async (req, res) => {
   res.json(piscines);
 });
 
-app.get("/piscines/:id", async (req, res) => {
-  const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
-  try {
-    const piscine = await Piscine.aggregate([
-      { $match: { id_piscine: piscineId } },
-      {
-        $lookup: {
-          from: "bassins", // Utiliser la collection "bassins" pour la jointure
-          localField: "id_piscine",
-          foreignField: "id_piscine",
-          as: "bassinsInfo",
-        },
-      },
-      {
-        $lookup: {
-          from: "piscines", // Utiliser la collection "piscines" pour la jointure
-          localField: "id_piscine",
-          foreignField: "id_piscine",
-          as: "piscinesInfo",
-        },
-      },
-      { $project: { _id: 0, nom_piscine: 1, bassinsInfo: 1, piscinesInfo: 1 } }, // Inclure les informations des bassins dans le résultat
-    ]);
-    if (piscine.length === 0) {
-      return res.status(404).json({ error: "Piscine not found" });
-    }
-    res.json(piscine[0]);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-app.put("/save-reservation", async (req, res) => {
-  const { piscineId, bassinId, dates, timeslots, client } = req.body;
-
-  console.log("piscineId:", piscineId);
+app.get("/piscine/:id", async (req, res) => {
+  const piscineId = Number(req.params.id);
 
   try {
     const piscine = await Piscine.findOne({ id_piscine: piscineId });
@@ -87,37 +48,78 @@ app.put("/save-reservation", async (req, res) => {
       return res.status(404).json({ error: "Piscine not found" });
     }
 
-    const bassin = piscine.bassins.find((b) => b === bassinId);
+    res.json(piscine);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/piscines/:id/bassins", async (req, res) => {
+  const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
+  try {
+    const piscine = await Piscine.findOne({ id_piscine: piscineId });
+    if (!piscine) {
+      return res.status(404).json({ message: "Piscine not found" });
+    }
+    const bassins = piscine.bassins;
+    res.json(bassins);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// still not working
+
+app.put("/save-reservation", async (req, res) => {
+  const { piscineId, bassinId, dates, timeslot, client } = req.body;
+
+  console.log("Id piscine : " + piscineId);
+  console.log("Id bassin : " + bassinId);
+  console.log("dates : ", dates);
+  console.log("timeslot : ", timeslot);
+  console.log("client : ", client);
+
+  try {
+    const piscine = await Piscine.findOne({ id_piscine: piscineId });
+
+    if (!piscine) {
+      return res.status(404).json({ error: "Piscine not found" });
+    }
+
+    const bassin = piscine.bassins.find((b) => b.id_bassin === bassinId);
 
     if (!bassin) {
       return res.status(404).json({ error: "Bassin not found" });
     }
 
-    const timeslot = piscine.timeslots.find(
-      (slot) => slot.timeslot_id === timeslots.timeslot_id
+    const selectedTimeslot = piscine.timeslots.find(
+      (slot) => slot.timeslot_id === timeslot.timeslot_id
     );
 
-    if (!timeslot) {
+    if (!selectedTimeslot) {
       return res.status(404).json({ error: "Timeslot not found" });
     }
 
     for (const date of dates) {
       const selectedDate = new Date(date);
-      selectedDate.setMonth(selectedDate.getMonth() + -1);
 
       const reservation = {
         date: selectedDate,
         id_bassin: bassinId,
         id_piscine: piscineId,
         timeslot: {
-          timeslot_id: timeslots.timeslot_id,
-          start_time: timeslots.start_time,
-          end_time: timeslots.end_time,
+          timeslot_id: selectedTimeslot.timeslot_id,
+          start_time: selectedTimeslot.start_time,
+          end_time: selectedTimeslot.end_time,
         },
-        client: client,
+        client: {
+          nom: client.nom,
+          adresse: client.adresse,
+          telephone: client.telephone,
+        },
       };
-
-      await Reservation.create(reservation);
 
       piscine.reservations.push(reservation);
     }
@@ -130,120 +132,6 @@ app.put("/save-reservation", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
-app.get("/reservations/:piscineId/:bassinId/:date", async (req, res) => {
-  const { piscineId, bassinId, date } = req.params;
-
-  try {
-    const piscine = await Piscine.findOne({ id_piscine: piscineId });
-
-    if (!piscine) {
-      console.log("Piscine not found");
-      return res.status(404).json({ error: "Piscine not found" });
-    }
-
-    const bassin = piscine.bassins.includes(bassinId);
-
-    if (!bassin) {
-      console.log("Bassin not found");
-      return res.status(404).json({ error: "Bassin not found" });
-    }
-
-    const bassinIdNumber = parseInt(bassinId); // Convertir bassinId en nombre
-
-    let databaseReservations = [];
-
-    if (Array.isArray(date)) {
-      // Si date est un tableau de dates
-      const formattedDates = date.map((d) => new Date(d));
-      databaseReservations = piscine.reservations.filter(
-        (reservation) =>
-          reservation.id_bassin === bassinIdNumber &&
-          formattedDates.some(
-            (d) => d.toDateString() === reservation.date.toDateString()
-          )
-      );
-    } else {
-      // Si date est une seule date
-      const formattedDate = new Date(date);
-      databaseReservations = piscine.reservations.filter(
-        (reservation) =>
-          reservation.id_bassin === bassinIdNumber &&
-          reservation.date.toDateString() === formattedDate.toDateString()
-      );
-    }
-
-    res.json(databaseReservations);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Server error" });
-  }
-});
-
-// app.get("/reservations/:date", async (req, res) => {
-//   const { date } = req.params;
-
-//   try {
-//     const reservations = await Piscine.aggregate([
-//       {
-//         $unwind: "$reservations",
-//       },
-//       {
-//         $match: {
-//           "reservations.date": {
-//             $gte: new Date(date),
-//             $lt: new Date(date + "T23:59:59.999Z"),
-//           },
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "bassins",
-//           localField: "id_bassin",
-//           foreignField: "_id",
-//           as: "bassin",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "timeslots",
-//           localField: "timeslot.timeslot_id",
-//           foreignField: "_id",
-//           as: "timeslot",
-//         },
-//       },
-//       {
-//         $lookup: {
-//           from: "clients",
-//           localField: "reservations.client",
-//           foreignField: "_id",
-//           as: "client",
-//         },
-//       },
-//       {
-//         $project: {
-//           _id: "$reservations._id",
-//           date: "$reservations.date",
-//           id_bassin: "$reservations.id_bassin",
-//           id_piscine: "$reservations.id_piscine",
-//           timeslot_id: "$reservations.timeslot.timeslot_id",
-//           start_time: "$reservations.timeslot.start_time",
-//           end_time: "$reservations.timeslot.end_time",
-//           client: { $arrayElemAt: ["$client", 0] },
-//           bassin: { $arrayElemAt: ["$bassin", 0] },
-//           timeslot: { $arrayElemAt: ["$timeslot", 0] },
-//         },
-//       },
-//     ]);
-
-//     console.log("Reservations:", reservations);
-
-//     res.json(reservations);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: "Internal server error" });
-//   }
-// });
 
 app.get("/bassins/:id", async (req, res) => {
   const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
@@ -274,71 +162,46 @@ app.get("/centres", async (req, res) => {
 });
 
 app.get("/centres/:id", async (req, res) => {
-  const centreId = Number(req.params.id); // Convertir l'ID en un nombre
   try {
-    const centre = await CentreSportif.aggregate([
-      { $match: { id_centre: centreId } },
-      {
-        $lookup: {
-          from: "terrains", // Utiliser la collection "terrains" pour la jointure
-          localField: "id_centre",
-          foreignField: "id_centre",
-          as: "terrainsInfo",
-        },
-      },
-      {
-        $lookup: {
-          from: "vestiaires", // Utiliser la collection "vestiaires" pour la jointure
-          localField: "id_centre",
-          foreignField: "id_centre",
-          as: "vestiairesInfo",
-        },
-      },
-      {
-        $lookup: {
-          from: "centres", // Utiliser la collection "vestiaires" pour la jointure
-          localField: "id_centre",
-          foreignField: "id_centre",
-          as: "centresInfo",
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          nom_centre: 1,
-          terrainsInfo: 1,
-          vestiairesInfo: 1,
-          centresInfo: 1,
-        },
-      }, // Inclure les informations des terrains et vestiaires dans le résultat
-    ]);
-    if (centre.length === 0) {
-      return res.status(404).json({ error: "Centre not found" });
+    const centre = await CentreSportif.findOne({ id_centre: req.params.id });
+    if (!centre) {
+      return res.status(404).json({ message: "Centre non trouvé" });
     }
-    res.json(centre[0]);
+    res.json(centre);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la récupération du centre" });
   }
 });
 
-app.get("/terrains", async (req, res) => {
-  const terrains = await Terrain.find();
-
-  res.json(terrains);
-});
-
-app.get("/terrains/:id", async (req, res) => {
-  const centreId = Number(req.params.id); // Convertir l'ID en un nombre
+app.get("/centres/:id/terrains", async (req, res) => {
   try {
-    const terrains = await Terrain.find({ id_centre: centreId });
-    if (terrains.length === 0) {
-      return res.status(404).json({ error: "Centre not found" });
+    const centre = await CentreSportif.findOne({ id_centre: req.params.id });
+    if (!centre) {
+      return res.status(404).json({ message: "Centre non trouvé" });
     }
+    const terrains = centre.terrains;
     res.json(terrains);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({
+      message: "Erreur lors de la récupération des terrains du centre",
+    });
+  }
+});
+
+app.get("/centres/:id/vestiaires", async (req, res) => {
+  try {
+    const centre = await CentreSportif.findOne({ id_centre: req.params.id });
+    if (!centre) {
+      return res.status(404).json({ message: "Centre non trouvé" });
+    }
+    const vestiaires = centre.vestiaires;
+    res.json(vestiaires);
+  } catch (error) {
+    res.status(500).json({
+      message: "Erreur lors de la récupération des vestiaires du centre",
+    });
   }
 });
 
@@ -358,49 +221,34 @@ app.get("/gyms", async (req, res) => {
   res.json(gyms);
 });
 
-app.get("/gyms/:id", async (req, res) => {
-  const gymId = Number(req.params.id);
+app.get("/gyms/salles/:id", async (req, res) => {
   try {
-    const gym = await Gym.aggregate([
-      { $match: { id_gym: gymId } },
-      {
-        $lookup: {
-          from: "salles",
-          localField: "id_gym",
-          foreignField: "id_gym",
-          as: "sallesInfo",
-        },
-      },
-      { $project: { _id: 0, nom_gym: 1, sallesInfo: 1 } },
-    ]);
-    console.log("Gym:", gym);
-    if (gym.length === 0) {
-      return res.status(404).json({ error: "Gym not found" });
+    const salleId = Number(req.params.id);
+    const gyms = await Gym.find(
+      { salles: { $elemMatch: { id_salle: salleId } } },
+      { "salles.$": 1 }
+    );
+    if (gyms.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "Aucune gym trouvée pour cette salle" });
     }
-    res.json(gym[0]);
+    res.json(gyms);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la récupération des gyms" });
   }
 });
 
 app.get("/salles", async (req, res) => {
-  const salles = await Salle.find();
-
-  res.json(salles);
-});
-
-app.get("/salles/:id", async (req, res) => {
-  const gymId = Number(req.params.id); // Convertir l'ID en un nombre
   try {
-    const salles = await Salle.find({ id_gym: gymId });
-    if (salles.length === 0) {
-      return res.status(404).json({ error: "Centre not found" });
-    }
+    const salles = await Gym.distinct("salles", {});
     res.json(salles);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la récupération des salles" });
   }
 });
 

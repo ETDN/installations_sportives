@@ -30,27 +30,21 @@ const InfrastructuresIndex = () => {
       try {
         const [
           centresResponse,
-          terrainsResponse,
           piscinesResponse,
           patinoireResponse,
           gymResponse,
-          salleResponse,
         ] = await Promise.all([
           axios.get("http://localhost:3001/centres"),
-          axios.get("http://localhost:3001/terrains"),
-          axios.get("http://localhost:3001/piscines"),
           axios.get("http://localhost:3001/infrastructures"),
+          axios.get("http://localhost:3001/piscines"),
           axios.get("http://localhost:3001/patinoires"),
-          axios.get("http://localhost:3001/bassins"),
           axios.get("http://localhost:3001/gyms"),
-          axios.get("http://localhost:3001/salles"),
         ]);
 
         setPiscines(piscinesResponse.data);
         setCentres(centresResponse.data);
         setPatinoires(patinoireResponse.data);
         setGyms(gymResponse.data);
-        setTerrains(terrainsResponse.data);
 
         console.log("centresResponse ", centresResponse.data);
       } catch (error) {

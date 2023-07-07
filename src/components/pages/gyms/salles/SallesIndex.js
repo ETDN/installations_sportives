@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+
 import {
   List,
   ListElement,
@@ -10,36 +10,23 @@ import {
 import { ContainerImg, ContainerSalle, IconGym } from "./SalleElement";
 
 const SallesIndex = () => {
-  const { id_gym } = useParams();
-  const [gym, setGym] = useState(null);
-  const [gyms, setGyms] = useState(null);
   const [salles, setSalles] = useState([]);
 
   useEffect(() => {
-    const fetchGym = async () => {
+    const fetchSalles = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3001/gyms/${id_gym}?_embed=salles`
-        );
+        const response = await axios.get("http://localhost:3001/salles");
         const data = response.data;
-        console.log("Gym data:", data);
-        setGym(data);
-        setGyms(data.gymsInfo);
-        setSalles(data.sallesInfo);
+        setSalles(data);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchGym();
-  }, [id_gym]);
-
-  if (!gym) {
-    return <div>Loading...</div>;
-  }
+    fetchSalles();
+  }, []);
 
   console.log("Salles:", salles);
-  console.log("Image:", gym.image);
 
   return (
     <ContainerSalle>

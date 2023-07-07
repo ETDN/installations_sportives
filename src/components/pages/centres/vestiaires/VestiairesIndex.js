@@ -10,11 +10,10 @@ const VestiaireIndex = ({ centreId }) => {
     const fetchVestiaires = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:3001/centres/${centreId}?_embed=vestiaires`
+          `http://localhost:3001/centres/${centreId}/vestiaires`
         );
         const data = response.data;
-        setVestiaires(data.vestiairesInfo);
-        console.log("Données vestiaires : ", data.vestiairesInfo);
+        setVestiaires(data);
       } catch (error) {
         // Gérer les erreurs
       }

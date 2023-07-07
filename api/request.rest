@@ -11,7 +11,7 @@ PUT http://localhost:3001/infrastructures/:id
 GET http://localhost:3001/gyms
 
 ###
-GET http://localhost:3001/gyms/1
+GET http://localhost:3001/gyms/salles/1
 
 ###
 
@@ -25,15 +25,11 @@ GET http://localhost:3001/piscines
 
 ###
 
-GET http://localhost:3001/piscines/1
-
+GET http://localhost:3001/piscine/1
 ###
 
-GET http://localhost:3001/bassins
 
-###
-
-GET http://localhost:3001/bassins/2
+GET http://localhost:3001/piscines/1/bassins
 
 ###
 
@@ -48,17 +44,18 @@ Content-Type: application/json
   "piscineId": 1,
   "bassinId": 1,
   "dates": ["2023-08-23", "2023-08-03"],
-  "timeslots": {
+  "timeslot": {
     "timeslot_id": 2,
     "start_time": "8:30",
     "end_time": "9:00"
   },
   "client": {
-    "nom": "Emilie",
+    "nom": "Daniel",
     "adresse": "789 Main Street",
     "telephone": "555-1234"
   }
 }
+
 
 
 // ---------------- Sports center queries ----------------------
@@ -71,12 +68,11 @@ GET http://localhost:3001/centres
 GET http://localhost:3001/centres/1
 
 ###
-
-GET http://localhost:3001/terrains
+GET http://localhost:3001/centres/1/terrains
 
 ###
 
-GET http://localhost:3001/terrains/2
+GET http://localhost:3001/centres/1/vestiaires
 
 ###
 
