@@ -18,18 +18,19 @@ const InfrastructuresIndex = () => {
   const [centres, setCentres] = useState([]);
   const [selectedCentre, setSelectedCentre] = useState(null);
 
-  const [terrains, setTerrains] = useState([]);
-
   const [patinoires, setPatinoires] = useState([]);
 
   const [gyms, setGyms] = useState([]);
   const [selectedGym, setSelectedGym] = useState(null);
+
+  const [infrastructures, setInfrastructures] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
           centresResponse,
+          infrastructureResponse,
           piscinesResponse,
           patinoireResponse,
           gymResponse,
@@ -41,12 +42,14 @@ const InfrastructuresIndex = () => {
           axios.get("http://localhost:3001/gyms"),
         ]);
 
+        setInfrastructures(infrastructureResponse.data);
         setPiscines(piscinesResponse.data);
         setCentres(centresResponse.data);
         setPatinoires(patinoireResponse.data);
         setGyms(gymResponse.data);
 
         console.log("centresResponse ", centresResponse.data);
+        console.log("piscinesResponse ", piscinesResponse.data);
       } catch (error) {
         console.error("Error " + error);
       }

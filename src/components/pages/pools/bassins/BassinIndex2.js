@@ -1,73 +1,54 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "moment/locale/fr";
-import moment from "moment";
-import Modal from "react-modal";
-import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
+import Modal from "react-modal";
+import moment from "moment";
+import "moment/locale/fr";
+import Swal from "sweetalert2";
+import { MdOutlineArrowForwardIos } from "react-icons/md";
+
 import {
   BassinContainer,
-  BassinList,
   Button,
   CalendarContainer,
-  CheckboxBassin,
-  ContainerRight,
+  DescriptionContainer,
   InfoContainer,
-  LabelBassin,
-  ListElement,
-  Paragraph,
-  PopupContainer,
-  ReservedTimeslotsItem,
-  TextH3,
   TimeslotsContainer,
   TimeslotsItem,
-  TitlePool,
-  WrapperDescription,
+  ContainerRight,
   WrapperImg,
+  WrapperDescription,
+  PopupContainer,
+  BassinList,
+  ListElement,
+  TitlePool,
+  CheckboxBassin,
+  Paragraph,
+  TextH3,
+  ReservedTimeslotsItem,
+  LabelBassin,
 } from "./BassinElement";
-import Calendrier from "../../calendrier";
 import { IconGym } from "../../gyms/salles/SalleElement";
-import { MdOutlineArrowForwardIos } from "react-icons/md";
+import Calendrier from "../../calendrier";
+
+Modal.setAppElement("#root");
 
 const BassinsIndex = () => {
   const { id_piscine } = useParams();
-  const [piscine, setPiscine] = useState([]);
-  const [selectedPiscine, setSelectedPiscine] = useState(null);
-  const [selectedDates, setSelectedDates] = useState([]);
-  const [selectedTimeslot, setSelectedTimeslot] = useState(null);
-  const [reservedTimeslots, setReservedTimeslots] = useState([]);
-  const [bassins, setBassins] = useState([]);
-  const [selectedBassin, setSelectedBassin] = useState(null);
-  const [timeslots, setTimeslots] = useState([]);
+  const [piscine, setPiscine] = useState(null);
+  const [piscines, setPiscines] = useState(null);
+  const [bassins, setBassins] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedBassin, setSelectedBassin] = useState(null);
+  const [selectedTimeslot, setSelectedTimeslot] = useState(null);
+  const [selectedDates, setSelectedDates] = useState([]);
+  const [reservedTimeslots, setReservedTimeslots] = useState([]);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const [clientInfo, setClientInfo] = useState({
     nom: "",
     adresse: "",
     telephone: "",
   });
-
-  useEffect(() => {
-    const fetchPiscine = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/piscines/${id_piscine}`
-        );
-        const data = response.data;
-        setPiscine(data);
-        setBassins(data.bassins);
-        setTimeslots(data.timeslots);
-        console.log(data.timeslots);
-      } catch (error) {
-        // Gérer les erreurs
-      }
-    };
-
-    fetchPiscine();
-  }, [id_piscine]);
-
-  if (!piscine) {
-    return <div>Loading...</div>;
-  }
 
   const handleClientInfoChange = (event) => {
     const { name, value } = event.target;
@@ -75,12 +56,6 @@ const BassinsIndex = () => {
       ...prevClientInfo,
       [name]: value,
     }));
-  };
-
-  const handleDateSelection = (date) => {
-    const selectedDates = Array.isArray(date) ? date : [date];
-    setSelectedDates(selectedDates);
-    console.log("Datessss :", selectedDates);
   };
 
   const handleBassinSelection = (bassin) => {
@@ -91,6 +66,30 @@ const BassinsIndex = () => {
   const handleTimeslotSelection = (timeslot) => {
     setSelectedTimeslot(timeslot);
     console.log("Timeslot", JSON.stringify(timeslot));
+  };
+
+  useEffect(() => {
+    const fetchPiscines = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3001/piscines/${id_piscine}/bassins`
+        );
+        const data = response.data;
+        console.log("Data from API:", data);
+        setPiscines([data]);
+      } catch (error) {
+        console.error(error);
+        // Gérer les erreurs
+      }
+    };
+
+    fetchPiscines();
+  }, []);
+
+  const handleDateSelection = (date) => {
+    const selectedDates = Array.isArray(date) ? date : [date];
+    setSelectedDates(selectedDates);
+    console.log("Datessss :", selectedDates);
   };
 
   const handleClosePopup = () => {
@@ -123,6 +122,61 @@ const BassinsIndex = () => {
     }
   };
 
+  useEffect(() => {
+    const fetchReservations = async () => {
+      if (selectedDates.length === 0 || !selectedBassin) {
+        return;
+      }
+
+      const formattedDates = selectedDates.map((date) =>
+        moment(date).subtract(1, "month").format("YYYY-MM-DD")
+      );
+
+      console.log("Formatted dates: " + formattedDates);
+
+      try {
+        const responses = await Promise.all(
+          formattedDates.map((date) =>
+            axios.get(
+              `http://localhost:3001/reservations/${id_piscine}/${selectedBassin.id_bassin}/${date}`
+            )
+          )
+        );
+
+        console.log(
+          "Reponses : " +
+            id_piscine +
+            "/" +
+            selectedBassin.id_bassin +
+            "/" +
+            formattedDates
+        );
+
+        const reservedTimeslots = responses.reduce((accumulator, response) => {
+          const reservations = response.data;
+          const timeslots = reservations.map(
+            (reservation) => reservation.timeslot
+          );
+          const timeslotIds = timeslots.map((timeslot) => timeslot.timeslot_id);
+          const timeslotInfo = timeslots.map((timeslot) => ({
+            timeslotId: timeslot.timeslot_id,
+            startTime: timeslot.start_time,
+            endTime: timeslot.end_time,
+          }));
+          console.log("Timeslot Info: ", timeslotInfo);
+          return accumulator.concat(timeslotIds);
+        }, []);
+
+        setReservedTimeslots(reservedTimeslots);
+      } catch (error) {
+        console.log(error);
+        // Handle error
+      }
+    };
+
+    fetchReservations();
+  }, [selectedDates, selectedBassin]);
+
   const handleSaveReservation = async () => {
     if (selectedBassin && selectedTimeslot) {
       setIsPopupOpen(true);
@@ -133,11 +187,23 @@ const BassinsIndex = () => {
       }
 
       try {
+        const reservations = selectedDates.map((date) => ({
+          bassinId: selectedBassin.id_bassin,
+          piscineId: id_piscine,
+          dates: [moment(date).format("YYYY-MM-DD")],
+          timeslots: {
+            timeslot_id: selectedTimeslot.timeslot_id,
+            start_time: selectedTimeslot.start_time,
+            end_time: selectedTimeslot.end_time,
+          },
+          client: clientInfo,
+        }));
+
         const requestBody = {
           piscineId: id_piscine,
           bassinId: selectedBassin.id_bassin,
           dates: selectedDates.map((date) => moment(date).format("YYYY-MM-DD")),
-          timeslot: {
+          timeslots: {
             timeslot_id: selectedTimeslot.timeslot_id,
             start_time: selectedTimeslot.start_time,
             end_time: selectedTimeslot.end_time,
@@ -175,11 +241,13 @@ const BassinsIndex = () => {
     <BassinContainer>
       <InfoContainer>
         <TitlePool>
-          <h1>{piscine.nom_piscine}</h1>
+          <h1>{piscine && piscine.nom_piscine}</h1>
         </TitlePool>
         <TimeslotsContainer>
-          {timeslots && timeslots.length > 0 ? (
-            timeslots.map((timeslot, index) => {
+          {piscines &&
+          piscines.length > 0 &&
+          piscines[0]?.timeslots.length > 0 ? (
+            piscines[0].timeslots.map((timeslot, index) => {
               const isReserved = reservedTimeslots.includes(
                 timeslot.timeslot_id
               );
@@ -218,7 +286,7 @@ const BassinsIndex = () => {
         <BassinList>
           {bassins && bassins.length > 0 ? (
             bassins.map((bassin) => (
-              <ListElement key={bassin.id_bassin}>
+              <ListElement key={bassin._id}>
                 <CheckboxBassin
                   selected={
                     selectedBassin &&
@@ -242,13 +310,23 @@ const BassinsIndex = () => {
           )}
         </BassinList>
         <Button onClick={handleSaveButtonClick}>Sauvegarder</Button>
+        <Button onClick={handleSaveReservation}>Réserver</Button>
       </InfoContainer>
 
       <ContainerRight>
         <WrapperDescription>
           <WrapperImg>
-            <IconGym src={piscine.image} alt={piscine.nom_piscine} />
+            <IconGym
+              src={piscines && piscines.length > 0 ? piscines[0].image : ""}
+            />
           </WrapperImg>
+          <DescriptionContainer>
+            <p>
+              {piscines && piscines.length > 0
+                ? piscines[0].description
+                : "No description available"}
+            </p>
+          </DescriptionContainer>
         </WrapperDescription>
         <TextH3>Période d'exploitation 2022-2022</TextH3>
         <ul>

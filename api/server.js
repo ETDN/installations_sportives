@@ -38,7 +38,7 @@ app.get("/piscines", async (req, res) => {
   res.json(piscines);
 });
 
-app.get("/piscine/:id", async (req, res) => {
+app.get("/piscines/:id", async (req, res) => {
   const piscineId = Number(req.params.id);
 
   try {
@@ -56,9 +56,11 @@ app.get("/piscine/:id", async (req, res) => {
 });
 
 app.get("/piscines/:id/bassins", async (req, res) => {
-  const piscineId = Number(req.params.id); // Convertir l'ID en un nombre
+  const piscineId = Number(req.params.id);
   try {
-    const piscine = await Piscine.findOne({ id_piscine: piscineId });
+    const piscine = await Piscine.findOne({ id_piscine: piscineId }).select(
+      "bassins"
+    );
     if (!piscine) {
       return res.status(404).json({ message: "Piscine not found" });
     }
@@ -69,7 +71,6 @@ app.get("/piscines/:id/bassins", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
 // still not working
 
 app.put("/save-reservation", async (req, res) => {
@@ -145,12 +146,6 @@ app.get("/bassins/:id", async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
-});
-
-app.get("/bassins", async (req, res) => {
-  const bassins = await Bassin.find();
-
-  res.json(bassins);
 });
 
 /* --------------- Centres sportifs  -------------------- */
