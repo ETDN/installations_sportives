@@ -25,7 +25,7 @@ GET http://localhost:3001/piscines
 
 ###
 
-GET http://localhost:3001/piscine/1
+GET http://localhost:3001/piscines/1
 ###
 
 
@@ -50,7 +50,7 @@ Content-Type: application/json
     "end_time": "9:00"
   },
   "client": {
-    "nom": "Daniel",
+    "nom": "Frank",
     "adresse": "789 Main Street",
     "telephone": "555-1234"
   }
