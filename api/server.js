@@ -105,6 +105,7 @@ app.put("/save-reservation", async (req, res) => {
 
     for (const date of dates) {
       const selectedDate = new Date(date);
+      selectedDate.setMonth(selectedDate.getMonth() - 1);
 
       const reservation = {
         date: selectedDate,
@@ -131,6 +132,55 @@ app.put("/save-reservation", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/reservations/:piscineId/:bassinId/:date", async (req, res) => {
+  const { piscineId, bassinId, date } = req.params;
+
+  try {
+    const piscine = await Piscine.findOne({ id_piscine: piscineId });
+
+    if (!piscine) {
+      console.log("Piscine not found");
+      return res.status(404).json({ error: "Piscine not found" });
+    }
+
+    const bassin = piscine.bassins.find(
+      (b) => b.id_bassin === parseInt(bassinId)
+    );
+
+    if (!bassin) {
+      console.log("Bassin not found");
+      return res.status(404).json({ error: "Bassin not found" });
+    }
+
+    let databaseReservations = [];
+
+    if (Array.isArray(date)) {
+      // Si date est un tableau de dates
+      const formattedDates = date.map((d) => new Date(d));
+      databaseReservations = piscine.reservations.filter(
+        (reservation) =>
+          reservation.id_bassin === parseInt(bassinId) &&
+          formattedDates.some(
+            (d) => d.toDateString() === reservation.date.toDateString()
+          )
+      );
+    } else {
+      // Si date est une seule date
+      const formattedDate = new Date(date);
+      databaseReservations = piscine.reservations.filter(
+        (reservation) =>
+          reservation.id_bassin === parseInt(bassinId) &&
+          reservation.date.toDateString() === formattedDate.toDateString()
+      );
+    }
+
+    res.json(databaseReservations);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Server error" });
   }
 });
 

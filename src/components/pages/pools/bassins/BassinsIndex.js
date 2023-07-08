@@ -56,7 +56,6 @@ const BassinsIndex = () => {
         setPiscine(data);
         setBassins(data.bassins);
         setTimeslots(data.timeslots);
-        console.log(data.timeslots);
       } catch (error) {
         // Gérer les erreurs
       }
@@ -64,6 +63,59 @@ const BassinsIndex = () => {
 
     fetchPiscine();
   }, [id_piscine]);
+
+  useEffect(() => {
+    const fetchReservations = async () => {
+      if (selectedDates.length === 0 || !selectedBassin) {
+        return;
+      }
+
+      const formattedDates = selectedDates.map((date) =>
+        moment(date).subtract(1, "month").format("YYYY-MM-DD")
+      );
+
+      console.log("Formatted dates: " + formattedDates);
+
+      try {
+        const responses = await Promise.all(
+          formattedDates.map((date) =>
+            axios.get(
+              `http://localhost:3001/reservations/${id_piscine}/${selectedBassin.id_bassin}/${date}`
+            )
+          )
+        );
+
+        console.log(
+          "Reponses : " +
+            id_piscine +
+            "/" +
+            selectedBassin.id_bassin +
+            "/" +
+            formattedDates
+        );
+
+        const reservedTimeslots = responses.reduce((accumulator, response) => {
+          const reservations = response.data;
+          const timeslots = reservations.map(
+            (reservation) => reservation.timeslot
+          );
+          const timeslotIds = timeslots.map((timeslot) => timeslot.timeslot_id);
+          const timeslotInfo = timeslots.map((timeslot) => ({
+            timeslotId: timeslot.timeslot_id,
+            startTime: timeslot.start_time,
+            endTime: timeslot.end_time,
+          }));
+          return accumulator.concat(timeslotIds);
+        }, []);
+
+        setReservedTimeslots(reservedTimeslots);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchReservations();
+  }, [selectedDates, selectedBassin]);
 
   if (!piscine) {
     return <div>Loading...</div>;
