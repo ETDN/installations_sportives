@@ -8,6 +8,8 @@ import {
   Icon,
   H2,
   Wrapper,
+  Button,
+  ButtonContainer,
 } from "./InfrastructureElement";
 import { Link } from "react-router-dom";
 
@@ -85,6 +87,10 @@ const InfrastructuresIndex = () => {
                 <Icon src={centre.image} alt={centre.nom_centre} />
               </Link>
               <H2>{centre.nom_centre}</H2>
+              <ButtonContainer>
+                <Button>Planifier</Button>
+                <Button>Réserver</Button>
+              </ButtonContainer>
             </Card>
           ))}
 
@@ -98,6 +104,10 @@ const InfrastructuresIndex = () => {
                 <Icon src={piscine.image} alt={piscine.nom_piscine} />
               </Link>
               <H2>{piscine.nom_piscine}</H2>
+              <ButtonContainer>
+                <Button>Planifier</Button>
+                <Button>Réserver</Button>
+              </ButtonContainer>
             </Card>
           ))}
 
@@ -105,6 +115,10 @@ const InfrastructuresIndex = () => {
             <Card key={patinoire._id}>
               <Icon src={patinoire.image} alt={patinoire.nom_patinoire}></Icon>
               <H2>{patinoire.nom_patinoire}</H2>
+              <ButtonContainer>
+                <Button>Planifier</Button>
+                <Button>Réserver</Button>
+              </ButtonContainer>
             </Card>
           ))}
 
@@ -119,6 +133,10 @@ const InfrastructuresIndex = () => {
               </Link>
 
               <H2>Salles de gyms</H2>
+              <ButtonContainer>
+                <Button>Planifier</Button>
+                <Button>Réserver</Button>
+              </ButtonContainer>
             </Card>
           ))}
         </Wrapper>

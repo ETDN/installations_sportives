@@ -24,19 +24,26 @@ export const ListElement = styled.li`
   margin-bottom: 10px;
 `;
 
-export const CheckboxBassin = styled.button`
-  margin-right: 10px;
-  appearance: none;
-  border: 1px solid black;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+export const ButtonBassin = styled.button`
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  margin-left: 20px;
+  justify-content: center;
   width: 130px;
   height: 50px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+
+  background-color: ${(props) => (props.selected ? "#ed0e2e" : "#ffffff")};
+
   &:hover {
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
     cursor: pointer;
   }
-
-  background-color: ${(props) => (props.selected ? "#b39373" : "#C0C0C0")};
 `;
 
 export const LabelBassin = styled.label`
@@ -44,14 +51,13 @@ export const LabelBassin = styled.label`
   color: ${(props) => (props.selected ? "#fff" : "#000000")};
   &:hover {
     cursor: pointer;
-    color: white;
   }
 `;
 
 export const ContainerRight = styled.div`
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
+  margin-top: 20px;
   padding: 20px;
   position: relative;
 
@@ -60,13 +66,9 @@ export const ContainerRight = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    width: 3px; /* Largeur de la bordure gauche */
+    width: 4px; /* Largeur de la bordure gauche */
     height: 100%;
-    background: linear-gradient(
-      to bottom,
-      #ed0e2e 50%,
-      #d3d3d3 50%
-    ); /* Dégradé de couleur */
+    background: linear-gradient(to bottom, #ed0e2e 50%, #ffffff 50%);
   }
 
   @media (min-width: 768px) {
@@ -143,9 +145,9 @@ export const AddressElement = styled.p`
 `;
 
 export const InfoContainer = styled.div`
-  margin-top: 20px;
-  margin-right: 30px;
-  margin-left: 60px;
+  background-color: #222739;
+  height: 100vh;
+  margin: 0;
 
   @media (min-width: 768px) {
     width: 45%;
@@ -155,6 +157,7 @@ export const InfoContainer = styled.div`
 export const TitlePool = styled.div`
   margin-top: 20px;
   margin-left: 30px;
+  color: white;
 
   @media (min-width: 768px) {
     width: 45%;
@@ -192,6 +195,7 @@ export const TimeslotsContainer = styled.div`
 
 export const TimeslotsItem = styled.p`
   text-align: center;
+  color: white;
   max-width: 90px;
   border: 2px solid #d3d3d3;
   padding: 5px 10px;
@@ -204,7 +208,7 @@ export const TimeslotsItem = styled.p`
   }
 
   &.selected {
-    background-color: #b59f84;
+    background-color: #0eca2d;
     color: white;
   }
 `;

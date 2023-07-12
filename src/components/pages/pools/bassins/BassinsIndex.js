@@ -2,15 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "moment/locale/fr";
 import moment from "moment";
-import Modal from "react-modal";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import {
   BassinContainer,
   BassinList,
   Button,
+  ButtonBassin,
   CalendarContainer,
-  CheckboxBassin,
   ContainerRight,
   InfoContainer,
   LabelBassin,
@@ -227,7 +226,7 @@ const BassinsIndex = () => {
     <BassinContainer>
       <InfoContainer>
         <TitlePool>
-          <h1>{piscine.nom_piscine}</h1>
+          <h1 style={{ color: "white" }}>{piscine.nom_piscine}</h1>
         </TitlePool>
         <TimeslotsContainer>
           {timeslots && timeslots.length > 0 ? (
@@ -271,7 +270,7 @@ const BassinsIndex = () => {
           {bassins && bassins.length > 0 ? (
             bassins.map((bassin) => (
               <ListElement key={bassin.id_bassin}>
-                <CheckboxBassin
+                <ButtonBassin
                   selected={
                     selectedBassin &&
                     selectedBassin.id_bassin === bassin.id_bassin
@@ -286,7 +285,7 @@ const BassinsIndex = () => {
                   >
                     {bassin.nom_bassin}
                   </LabelBassin>
-                </CheckboxBassin>
+                </ButtonBassin>
               </ListElement>
             ))
           ) : (

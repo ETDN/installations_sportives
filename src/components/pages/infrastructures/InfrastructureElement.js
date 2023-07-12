@@ -7,7 +7,6 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   padding: 0 30px;
-  height: 100vh;
   position: relative;
   z-index: 1;
 
@@ -20,24 +19,13 @@ export const Container = styled.div`
   }
 `;
 
-export const Background = styled.div`
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-`;
-
 export const Wrapper = styled.div`
   max-width: 1000px;
   margin: 0 auto;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  grid-gap: 65px;
+  grid-gap: 110px;
   padding: 0 50px;
   z-index: 3;
 
@@ -60,12 +48,6 @@ export const Card = styled.div`
   width: 300px;
   height: 300px;
   transition: all 0.2s ease-in-out;
-
-  &:hover {
-    transform: scale(1.02);
-    transition: all 0.2s ease-in-out;
-    cursor: pointer;
-  }
 `;
 
 export const Icon = styled.img`
@@ -75,6 +57,12 @@ export const Icon = styled.img`
   transition: transform 0.5s ease;
   box-shadow: rgb(237, 14, 46)-10px 10px;
   z-index: 3;
+
+  &:hover {
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
 `;
 
 export const Titre = styled.h1`
@@ -87,7 +75,7 @@ export const H1 = styled.h1`
   color: black;
   font-weight: 400;
   font-size: 2rem;
-  margin-top: 250px;
+  margin-top: 50px;
   margin-bottom: 40px;
   z-index: 3;
 
@@ -131,4 +119,30 @@ export const ListElement = styled.li`
   &:hover {
     color: red;
   }
+`;
+
+export const Button = styled.button`
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+  margin-left: 20px;
+  justify-content: center;
+  background-color: #ed0e2e;
+  color: white;
+  width: fit-content;
+  height: 50px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.02);
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+  }
+`;
+
+export const ButtonContainer = styled.div`
+  display: flex;
 `;
