@@ -15,7 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<SportsFieldMap />} />
+        <Route path="/" element={<InfrastructuresIndex />} />
         <Route path="/mapper" element={<SportsFieldMap />} />
         <Route
           path="/calendar"
