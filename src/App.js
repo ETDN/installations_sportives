@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Route, Routes, BrowserRouter } from "react-router-dom";
 import SportsFieldMap from "./components/image_mapper";
-import PoolReservation from "./components/pool_reservation";
-import Calendar from "react-calendar"; // Importer le composant Calendar directement
+import Calendar from "react-calendar";
 import InfrastructuresIndex from "./components/pages/infrastructures/InfrastructuresIndex";
 import BassinsIndex from "./components/pages/pools/bassins/BassinsIndex";
 import TerrainsIndex from "./components/pages/centres/terrains/TerrainsIndex";
@@ -17,7 +16,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<SportsFieldMap />} />
-        <Route path="/pool" element={<PoolReservation />} />
         <Route path="/mapper" element={<SportsFieldMap />} />
         <Route
           path="/calendar"
