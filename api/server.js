@@ -22,7 +22,6 @@ const Piscine = require("./models/PiscinesModel");
 const CentreSportif = require("./models/CentresSportifsModel");
 const Patinoire = require("./models/PatinoiresModel");
 const Gym = require("./models/GymsModel");
-//if we make a request to localhost 3001/todos it's gonna to find our todos and find our model
 
 app.get("/infrastructures", async (req, res) => {
   const infrastructures = await Infrastructure.find();
