@@ -24,14 +24,13 @@ import {
   WrapperDescription,
   WrapperImg,
 } from "./BassinElement";
-import Calendrier from "../../calendrier";
+import Calendrier from "../../../calendar/calendrier";
 import { IconGym } from "../../gyms/salles/SalleElement";
 import { MdOutlineArrowForwardIos } from "react-icons/md";
 
 const BassinsIndex = () => {
   const { id_piscine } = useParams();
   const [piscine, setPiscine] = useState([]);
-  const [selectedPiscine, setSelectedPiscine] = useState(null);
   const [selectedDates, setSelectedDates] = useState([]);
   const [selectedTimeslot, setSelectedTimeslot] = useState(null);
   const [reservedTimeslots, setReservedTimeslots] = useState([]);
@@ -99,11 +98,7 @@ const BassinsIndex = () => {
             (reservation) => reservation.timeslot
           );
           const timeslotIds = timeslots.map((timeslot) => timeslot.timeslot_id);
-          const timeslotInfo = timeslots.map((timeslot) => ({
-            timeslotId: timeslot.timeslot_id,
-            startTime: timeslot.start_time,
-            endTime: timeslot.end_time,
-          }));
+
           return accumulator.concat(timeslotIds);
         }, []);
 

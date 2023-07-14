@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import "../css/image_mapper.css";
 import ImageMapper from "react-image-mapper";
-import image from "../img/plan_terrain_ecossia.PNG";
+import image from "../components/img/plan_terrain_ecossia.PNG";
 
-//ES6 way
 const SportsFieldMap = (props) => {
   const [msg, setMsg] = useState(null);
   const [hoveredArea, setHoveredArea] = useState(null);
