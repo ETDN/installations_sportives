@@ -109,7 +109,7 @@ const BassinsIndex = () => {
     };
 
     fetchReservations();
-  }, [selectedDates, selectedBassin]);
+  }, [selectedDates, selectedBassin, id_piscine]);
 
   if (!piscine) {
     return <div>Loading...</div>;
@@ -191,15 +191,11 @@ const BassinsIndex = () => {
           client: clientInfo,
         };
 
-        const response = await axios.put(
-          "http://localhost:3001/save-reservation",
-          requestBody,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        await axios.put("http://localhost:3001/save-reservation", requestBody, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
         setIsPopupOpen(false);
         Swal.fire(
