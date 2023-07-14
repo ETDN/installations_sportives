@@ -25,14 +25,11 @@ const InfrastructuresIndex = () => {
   const [gyms, setGyms] = useState([]);
   const [selectedGym, setSelectedGym] = useState(null);
 
-  const [infrastructures, setInfrastructures] = useState([]);
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [
           centresResponse,
-          infrastructureResponse,
           piscinesResponse,
           patinoireResponse,
           gymResponse,
@@ -44,7 +41,6 @@ const InfrastructuresIndex = () => {
           axios.get("http://localhost:3001/gyms"),
         ]);
 
-        setInfrastructures(infrastructureResponse.data);
         setPiscines(piscinesResponse.data);
         setCentres(centresResponse.data);
         setPatinoires(patinoireResponse.data);
@@ -69,7 +65,7 @@ const InfrastructuresIndex = () => {
   };
 
   const handleClickGym = (id) => {
-    setSelectedPiscine(id === selectedPiscine ? null : id);
+    setSelectedGym(id === selectedGym ? null : id);
   };
 
   return (
