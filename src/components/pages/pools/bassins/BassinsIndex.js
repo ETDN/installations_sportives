@@ -54,9 +54,7 @@ const BassinsIndex = () => {
         setPiscine(data);
         setBassins(data.bassins);
         setTimeslots(data.timeslots);
-      } catch (error) {
-        // Gérer les erreurs
-      }
+      } catch (error) {}
     };
 
     fetchPiscine();

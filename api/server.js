@@ -2,8 +2,10 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 
+//L'usage de ChatGPT à été nécessaire à la création d'une partie de ce code.
+
 const app = express();
-const server = require("http").Server(app); // Créez un serveur HTTP avec Express
+const server = require("http").Server(app);
 const { v4: uuidv4 } = require("uuid");
 
 app.use(cors());
@@ -24,6 +26,7 @@ const Patinoire = require("./models/PatinoiresModel");
 const Gym = require("./models/GymsModel");
 
 app.get("/infrastructures", async (req, res) => {
+  s;
   const infrastructures = await Infrastructure.find();
 
   res.json(infrastructures);

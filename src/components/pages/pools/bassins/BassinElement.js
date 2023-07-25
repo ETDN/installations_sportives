@@ -66,7 +66,7 @@ export const ContainerRight = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    width: 4px; /* Largeur de la bordure gauche */
+    width: 4px;
     height: 100%;
     background: linear-gradient(to bottom, #ed0e2e 50%, #ffffff 50%);
   }
